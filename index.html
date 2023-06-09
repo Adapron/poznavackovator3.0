@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Import/Export</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h2>JSON Import/Export</h2>
+    <div>
+        <label for="input">Input:</label>
+        <input type="text" id="input" name="input">
+    </div>
+    <br>
+    <div>
+        <button onclick="exportJSON()">Export JSON</button>
+        <button onclick="importJSON()">Import JSON</button>
+        <button onclick="loadDefaultJSON()">Load Default</button>
+    </div>
+
+    <script>
+        function exportJSON() {
+            var input = document.getElementById('input').value;
+            var data = {
+                "input": input
+            };
+            var json = JSON.stringify(data, null, 2);
+
+            var a = document.createElement('a');
+            a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+            a.download = 'data.json';
+            a.click();
+        }
+
+        function importJSON() {
+            var inputElement = document.createElement('input');
+            inputElement.type = 'file';
+
+            inputElement.addEventListener('change', function (e) {
+                var file = e.target.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var contents = e.target.result;
+                    var data = JSON.parse(contents);
+                    var input = data.input;
+
+                    document.getElementById('input').value = input;
+                };
+
+                reader.readAsText(file);
+            });
+
+            inputElement.click();
+        }
+
+        function loadDefaultJSON() {
+    fetch('default.json')
+        .then(response => response.json())
+        .then(data => {
+            var input = data.input;
+            document.getElementById('input').value = input;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+
+    </script>
+</body>
+</html>
