@@ -34,38 +34,62 @@
                 a.click();
             }
         
-            function inputFile(){
-                var inputElement = document.createElement('input');
-                inputElement.type = 'file';
+            function inputFile() {
+                return new Promise((resolve, reject) => {
+                    var inputElement = document.createElement('input');
+                    inputElement.type = 'file';
 
-                inputElement.addEventListener('change', function (e) {
-                    var file = e.target.files[0];
-                    var reader = new FileReader();
+                    inputElement.addEventListener('change', function (e) {
+                        var file = e.target.files[0];
+                        var reader = new FileReader();
 
-                    reader.onload = function (e) {
-                        var contents = e.target.result;
-                        var data = JSON.parse(contents);
-                        return(data);
+                        reader.onload = function (e) {
+                            var contents = e.target.result;
+                            var data = JSON.parse(contents);
+                            resolve(data);
+                        };
 
-                        document.getElementById('input').value = input;
-                    };
+                        reader.onerror = function (error) {
+                            reject(error);
+                        };
 
-                    reader.readAsText(file);
+                        reader.readAsText(file);
+                    });
+
+                    inputElement.click();
                 });
+            }
 
-                inputElement.click();
+            async function importJSON() {
+                try {
+                    var data = await inputFile();
+                    var input = data.input;
+                    document.getElementById('input').value = input;
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             }
         
-            function loadJSON(file){
-                fetch(file)
+            function loadJSON(file) {
+                return fetch(file)
                     .then(response => response.json())
                     .then(data => {
-                        return(data);
-                    })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                        return data;
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
             }
+
+            async function loadDefaultJSON() {
+                try {
+                    var data = await loadJSON('default.json');
+                    var input = data.input;
+                    document.getElementById('input').value = input;
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+ 
             
             function exportJSON() {
                 //get the input
@@ -83,16 +107,9 @@
                 
             }
 
-            async function importJSON() {
-                var data = await inputFile();
-                var input = data.input;
-            }
+            
 
-            function loadDefaultJSON() {
-                var data = loadJSON("default.json");
-                var input = data.input;
-                document.getElementById('input').value = input;
-            }       
+               
 
 
         </script>
