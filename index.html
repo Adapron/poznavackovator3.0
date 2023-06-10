@@ -120,8 +120,12 @@
                 background-color: #00000000;
             }
 
+            .boing {
+                transition: transform 0.1s linear;
+            }
+
             .boing:active {
-                animation: pulse 0.1s linear;
+                transform: scale(0.9);
             }
 
             @keyframes pulse {
