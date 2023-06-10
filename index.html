@@ -3,38 +3,228 @@
     <head>
         <title>JSON Import/Export</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+                top: 12px;
+                margin: 0 10px;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ffd7fd;
+                transition: 0.4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: 0.4s;
+                border-radius: 50%;
+            }
+
+            .checkbox:checked + .slider {
+                background-color: #a3289380;
+            }
+
+            .checkbox:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+            .section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+
+                z-index: 1;
+            }
+
+            .ui {
+                height: 30px;
+                border-radius: 10px;
+                border-width: 0px;
+                box-shadow: 0 0 50px 5px #a3289380;
+                background-color: white;
+            }
+
+            .customDropDown {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 0;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+
+                transition: transform 0.3s;
+                transform: translateY(-110px);
+                position: absolute;
+                top: 295px;
+
+            }
+
+            
+
+            
+
+            .slidedDropDown{
+                transform: translateY(-30px);
+            }
+        
+            .dropDownButton{
+                border: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding: 10px;
+                background-color: #00000000;
+            }
+
+            .boing:active {
+                animation: pulse 0.1s linear;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(0.90);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            switchContainer {
+                display: flex;
+                align-items: center;
+            }
+        </style>
     </head>
 
 
     <body>
-        <h2>JSON Import/Export</h2>
+        
+        <br>
 
-        <div>
-            <label for="input">Input:</label>
-            <input type="text" id="input" name="input">
+        <div id = "title" class = "section" style="width: 100%; z-index: 1;"> 
+            <br>
+            <img src = "title.png" class="boing" >
+            <br>
+            <br>
         </div>
 
         <br>
 
-        <div> <!-- Buttons to import/export -->
-            <button onclick="exportJSON()">Export JSON</button>
-            <button onclick="importJSON()">Import JSON</button>
-            <button onclick="loadDefaultJSON()">Load Default</button>
+        <div id = "filePickWindow" class = "section" style="width: 600px;">
+            <br>
+            <select class="ui boing" style="width: 100%;" >
+                <option class="ui" >1</option>
+                <option class="ui" >2</option>
+                <option class="ui" >3</option>
+                <option class="ui" >4</option>
+                <option class="ui" >5</option>
+            </select>
+
+            <br>
+
+            <div id = "switchContainer">
+                <button class = "boing ui" style="height: 30px;">nižší</button>
+                <label class="switch boing" >
+                    <input type="checkbox" id="toggleType" class="checkbox">
+                    <span class="slider"></span>
+                </label>
+                <button class = "boing ui" style="height: 30px;">vyšší</button>
+            </div>
+            <br>
+
         </div>
 
+        
+        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute;">
+            <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
+            <button  class="ui boing" style="width: 30%;" >load from file</button>
+            <button  class="ui boing" style="width: 30%;" >save to file</button>
+            <button  class="ui boing" style="width: 30%;" >edit file</button>
+        
+        </div>
+        
+        <div id = "customContainer" style="width: 600px; height: 55px; ">
+        </div>
 
+        <div id = "main" class = "section" style="width: 600px; height: 800px;">
+
+
+        </div>
 
         <script>
+            function slideDropDown(){
+                let dropdown = document.getElementById("filePickWindowDropdown");
+                let container = document.getElementById("customContainer");
+                container.style.transition = "height 0.3s";
+
+                if(dropdown.classList.contains('slidedDropDown')){
+                    dropdown.classList.remove('slidedDropDown');
+                    container.style.height = "55px";
+                }else{
+                    dropdown.classList.add('slidedDropDown');
+                    container.style.height = "140px";
+                }
+                
+            }
+        </script>
+
+        <script> // I/O
             const fileName = "data.json";
 
-            function downloadJSON(json){
+            function downloadJSON(json, fileName){ //saves the json to users computer
                 var a = document.createElement('a');
                 a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
                 a.download = fileName;
                 a.click();
             }
         
-            function inputFile() {
+            function inputFile() { //lets the user upload a file and returns parsed json
                 return new Promise((resolve, reject) => {
                     var inputElement = document.createElement('input');
                     inputElement.type = 'file';
@@ -59,6 +249,31 @@
                     inputElement.click();
                 });
             }
+        
+            function loadJSON(file) { //loads a json from file by its path and return the parsed json
+                return fetch(file)
+                    .then(response => response.json())
+                    .then(data => {
+                        return data;
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+
+            function exportJSON() {
+                var input = document.getElementById('input').value; //get the input
+
+                //construct the object
+                var data = {
+                    "input": input
+                };
+
+                var json = JSON.stringify(data, null, 2); //convert to JSON
+
+                downloadJSON(json, fileName);
+                
+            }
 
             async function importJSON() {
                 try {
@@ -68,16 +283,6 @@
                 } catch (error) {
                     console.error('Error:', error);
                 }
-            }
-        
-            function loadJSON(file) {
-                return fetch(file)
-                    .then(response => response.json())
-                    .then(data => {
-                        return data;
-                    }).catch(error => {
-                        console.error('Error:', error);
-                    });
             }
 
             async function loadDefaultJSON() {
@@ -90,28 +295,25 @@
                 }
             }
  
-            
-            function exportJSON() {
-                //get the input
-                var input = document.getElementById('input').value;
-
-                //construct the object
-                var data = {
-                    "input": input
-                };
-
-                //convert to JSON
-                var json = JSON.stringify(data, null, 2); 
-
-                downloadJSON(json);
-                
+        </script>
+    
+        <script> // toggleSwich
+            document.getElementById("toggleType").addEventListener("change", function() {
+            // Toggle the switch's state
+            if (this.checked) {
+                // Switch is ON
+                // Perform actions when switch is on
+            } else {
+                // Switch is OFF
+                // Perform actions when switch is off
             }
-
-            
-
-               
-
+            });
 
         </script>
+
+        <script>
+
+        </script>
+
     </body>
 </html>
