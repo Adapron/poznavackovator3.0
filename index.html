@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>JSON Import/Export</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     
@@ -149,19 +150,19 @@
 
     <body>
         
-        <br>
+        <br style = "height:20px;">
 
-        <div id = "title" class = "section" style="width: 100%; z-index: 1;"> 
-            <br>
+        <div id = "title" class = "section" style="width: 100%; z-index: 1; height: 120px;"> 
+            <br style = "height:20px;">
             <img src = "title.png" class="boing" >
-            <br>
-            <br>
+            <br style = "height:20px;">
+            <br style = "height:20px;">
         </div>
 
-        <br>
+        <br style = "height:20px;">
 
-        <div id = "filePickWindow" class = "section" style="width: 600px;">
-            <br>
+        <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
+            <br style = "height:20px;">
             <select class="ui boing" style="width: 100%;" >
                 <option class="ui" >1</option>
                 <option class="ui" >2</option>
@@ -170,7 +171,7 @@
                 <option class="ui" >5</option>
             </select>
 
-            <br>
+            <br style = "height:20px;">
 
             <div id = "switchContainer">
                 <button class = "boing ui" style="height: 30px;">nižší</button>
@@ -180,7 +181,7 @@
                 </label>
                 <button class = "boing ui" style="height: 30px;">vyšší</button>
             </div>
-            <br>
+            <br style = "height:20px;">
 
         </div>
 
@@ -196,7 +197,7 @@
         <div id = "customContainer" style="width: 600px; height: 55px; ">
         </div>
 
-        <div id = "main" class = "section" style="width: 600px; height: 800px;">
+        <div id = "main" class = "section" style="width: 600px; height: 800px; position: absolute; top: 350px">
 
 
         </div>
@@ -205,14 +206,18 @@
             function slideDropDown(){
                 let dropdown = document.getElementById("filePickWindowDropdown");
                 let container = document.getElementById("customContainer");
+                let main = document.getElementById("main");
+                main.style.transition = "top 0.3s"
                 container.style.transition = "height 0.3s";
 
                 if(dropdown.classList.contains('slidedDropDown')){
                     dropdown.classList.remove('slidedDropDown');
                     container.style.height = "55px";
+                    main.style.top = "350px";
                 }else{
                     dropdown.classList.add('slidedDropDown');
                     container.style.height = "140px";
+                    main.style.top = "435px";
                 }
                 
             }
