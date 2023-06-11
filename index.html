@@ -212,6 +212,31 @@
 
 
 
+            #info {
+                position: absolute;
+                top: 10px;
+                left: -50px;
+                width: 100px;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
+
+            #settings {
+                position: absolute;
+                top: 10px;
+                right: -50px;
+                width: 100px;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
 
            
         </style>
@@ -266,30 +291,40 @@
         <div id = "customContainer" style="width: 600px; height: 55px; ">
         </div>
 
-        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px">
+        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10;">
+            <div id = "info" class="ui">
+                <button class="ui boing" onclick="info()" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+            <div id = "settings" class = "ui">
+                <button class="ui boing" onclick="settings()" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+            <div class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10;">
             
-            <div id = "imageDiv" class = "ui">
 
-            </div>
+                <div id = "imageDiv" class = "ui">
 
-            <div id = "underImage" class = "under">
-                <button class = "ui field boing" id = "learnButton">learn</button>
-                <button class = "ui field boing" id = "showButton">show</button>
-            </div>
-
-            <div id = "imageName" class = "ui">
-
-            </div>
-
-            <div id = "underName" class = "under" style="top:-20px">
-                <div id = "clock" class = "ui field clockFont">
-                        00:00:01
                 </div>
-                <div id = "counter" class = "ui field clockFont">
-                        000001
-                </div>
-            </div>
 
+                <div id = "underImage" class = "under">
+                    <button class = "ui field boing" id = "learnButton">learn</button>
+                    <button class = "ui field boing" id = "showButton">show</button>
+                </div>
+
+                <div id = "imageName" class = "ui">
+
+                </div>
+
+                <div id = "underName" class = "under" style="top:-20px">
+                    <div id = "clock" class = "ui field clockFont">
+                            00:00:01
+                    </div>
+                    <div id = "counter" class = "ui field clockFont">
+                            000001
+                    </div>
+                </div>
+
+
+            </div>
         </div>
 
         <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 665px;">
@@ -365,6 +400,43 @@
         
 
         <script>
+            var infoT = false;
+            var settingsT = false;
+            function info(){
+                div = document.getElementById("info");
+                div.style.transition = "height 0.3s, width 0.3s, left 0.3s";
+                
+
+                if(infoT){
+                    div.style.width = "100px";
+                    div.style.height = "50px";
+                    div.style.left = "-50px";
+                    infoT = false;
+                }else{
+                    div.style.width = "200px";
+                    div.style.height = "500px";
+                    div.style.left = "-150px";
+                    infoT = true;
+                }
+            }
+
+            function settings(){
+                div = document.getElementById("settings");
+                div.style.transition = "height 0.3s, width 0.3s, right 0.3s";
+
+                if(settingsT){
+                    div.style.width = "100px";
+                    div.style.height = "50px";
+                    div.style.right = "-50px";
+                    settingsT = false;
+                }else{
+                    div.style.width = "200px";
+                    div.style.height = "500px";
+                    div.style.right = "-150px";
+                    settingsT = true;
+                }
+            }
+
             function slideDropDown(){
                 let dropdown = document.getElementById("filePickWindowDropdown");
                 let container = document.getElementById("customContainer");
