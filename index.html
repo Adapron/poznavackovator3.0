@@ -110,6 +110,10 @@
             .slidedDropDown{
                 transform: translateY(-30px);
             }
+
+            .slidedDropDownMain{
+                transform: translateY(+200px);
+            }
         
             .dropDownButton{
                 border: none;
@@ -140,10 +144,76 @@
                     transform: scale(1);
                 }
             }
-            switchContainer {
-                display: flex;
-                align-items: center;
+            #learned {
+                height: fit-content;
+                width: 80%
+                
             }
+            #listdiv {
+                width: 100%;
+                height: 70%;
+                position: relative;
+                border-radius: 10px;
+                top:10px;
+                background-color: rgb(255, 255, 255);
+                box-shadow: 0 0 50px 5px #a3289380;
+                overflow-y: auto;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            #imageName{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                top: 0px;
+            }
+
+            #imageDiv {
+                width: 100%;
+                height: 300px;
+                position: relative;
+                top: 30px;
+            }
+
+            .under {
+                align-items: center;
+                display: flex;
+                gap: 20px;
+                position: relative;
+                top: 15px;
+
+            }
+
+            @font-face {
+                font-family: 'SevenSegment';
+                src:    url('font.woff2') format('woff2'),
+                        url('font.ttf') format('truetype'),
+                        url('font.woff') format('woff');
+                /* Add more font formats as needed for cross-browser support */
+                /* Replace 'path/to/seven-segment-font' with the actual path to the font files */
+            }
+
+            .field {
+                height: 50px;
+                width: 290px;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+            }
+
+            .clockFont{
+                font-family: 'SevenSegment', Arial, sans-serif;
+            }
+
+
+
+
+           
         </style>
     </head>
 
@@ -163,7 +233,7 @@
 
         <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
             <br style = "height:20px;">
-            <select class="ui boing" style="width: 100%;" >
+            <select class="ui" style="width: 100%; height: 50px;" >
                 <option class="ui" >1</option>
                 <option class="ui" >2</option>
                 <option class="ui" >3</option>
@@ -171,7 +241,6 @@
                 <option class="ui" >5</option>
             </select>
 
-            <br style = "height:20px;">
 
             <div id = "switchContainer">
                 <button class = "boing ui" style="height: 30px;">nižší</button>
@@ -186,7 +255,7 @@
         </div>
 
         
-        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute;">
+        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute; ">
             <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
             <button  class="ui boing" style="width: 30%;" >load from file</button>
             <button  class="ui boing" style="width: 30%;" >save to file</button>
@@ -197,10 +266,103 @@
         <div id = "customContainer" style="width: 600px; height: 55px; ">
         </div>
 
-        <div id = "main" class = "section" style="width: 600px; height: 800px; position: absolute; top: 350px">
+        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px">
+            
+            <div id = "imageDiv" class = "ui">
 
+            </div>
+
+            <div id = "underImage" class = "under">
+                <button class = "ui field boing" id = "learnButton">learn</button>
+                <button class = "ui field boing" id = "showButton">show</button>
+            </div>
+
+            <div id = "imageName" class = "ui">
+
+            </div>
+
+            <div id = "underName" class = "under" style="top:-20px">
+                <div id = "clock" class = "ui field clockFont">
+                        00:00:01
+                </div>
+                <div id = "counter" class = "ui field clockFont">
+                        000001
+                </div>
+            </div>
 
         </div>
+
+        <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 665px;">
+            <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
+            <div id = "listdiv">
+                <ol id = "learned" style="column-count: 3;">
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                    <li>thing1</li>
+                    <li>thing2</li>
+                    <li>thing3</li>
+                    <li>thing4</li>
+                </ol>
+            </div>
+        
+        </div>
+
+        
+        
 
         <script>
             function slideDropDown(){
@@ -217,7 +379,17 @@
                 }else{
                     dropdown.classList.add('slidedDropDown');
                     container.style.height = "140px";
-                    main.style.top = "435px";
+                    main.style.top = "430px";
+                }
+                
+            }
+
+            function slideDropDown2(){
+                let dropdown = document.getElementById("mainDropdown");
+                if(dropdown.classList.contains('slidedDropDownMain')){
+                    dropdown.classList.remove('slidedDropDownMain');
+                }else{
+                    dropdown.classList.add('slidedDropDownMain');
                 }
                 
             }
