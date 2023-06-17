@@ -11,6 +11,13 @@
                 flex-direction: column;
                 align-items: center;
             }
+            #poznavackovator{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+            }
             .switch {
                 position: relative;
                 display: inline-block;
@@ -125,6 +132,7 @@
                 background-color: #00000000;
             }
 
+
             .boing {
                 transition: transform 0.1s linear;
             }
@@ -156,7 +164,7 @@
                 border-radius: 10px;
                 top:10px;
                 background-color: rgb(255, 255, 255);
-                box-shadow: 0 0 50px 5px #a3289380;
+                box-shadow: 0 0 50px 5px #9e589580;
                 overflow-y: auto;
                 display: flex;
                 justify-content: center;
@@ -238,21 +246,26 @@
                 z-index: -5555;
             }
 
+            
+
            
         </style>
     </head>
 
+    
 
     <body>
-        
         <br style = "height:20px;">
-
-        <div id = "title" class = "section" style="width: 100%; z-index: 1; height: 120px;"> 
+        <div id = "title" class = "section" style="width: 98.6%; z-index: 1; height: 120px; border-radius: 0px; "> 
             <br style = "height:20px;">
             <img src = "title.png" class="boing" >
             <br style = "height:20px;">
             <br style = "height:20px;">
         </div>
+        <div id = "poznavackovator">
+        
+
+        
 
         <br style = "height:20px;">
 
@@ -291,7 +304,13 @@
         <div id = "customContainer" style="width: 600px; height: 55px; ">
         </div>
 
-        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10;">
+        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
+
+
+            <div id = "iDiv" style="background-color: black; width: 100px; height: 400px; position: absolute; left: -110px; top: 70px">
+
+            </div>
+
             <div id = "info" class="ui">
                 <button class="ui boing" onclick="info()" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
             </div>
@@ -325,78 +344,79 @@
 
 
             </div>
-        </div>
-
-        <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 665px;">
-            <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
-            <div id = "listdiv">
-                <ol id = "learned" style="column-count: 3;">
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                    <li>thing1</li>
-                    <li>thing2</li>
-                    <li>thing3</li>
-                    <li>thing4</li>
-                </ol>
+            <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 315px;">
+                <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
+                <div id = "listdiv">
+                    <ol id = "learned" style="column-count: 3;">
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                        <li>thing1</li>
+                        <li>thing2</li>
+                        <li>thing3</li>
+                        <li>thing4</li>
+                    </ol>
+                </div>
+            
             </div>
-        
         </div>
 
         
+
+    </div>
         
 
         <script>
