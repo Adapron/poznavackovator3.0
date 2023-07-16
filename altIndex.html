@@ -103,6 +103,10 @@
                 background-color: white;
                 border-radius: 10px;
 
+                border-color: #ffffff;
+                border-width: 1px;
+                align
+
                 transition: transform 0.3s;
                 transform: translateY(-110px);
                 position: absolute;
@@ -164,7 +168,7 @@
                 border-radius: 10px;
                 top:10px;
                 background-color: rgb(255, 255, 255);
-                box-shadow: 0 0 50px 5px #9e589580;
+                box-shadow: 0 0 50px 5px #0066ff9f;
                 overflow-y: auto;
                 display: flex;
                 justify-content: center;
@@ -246,6 +250,25 @@
                 z-index: -5555;
             }
 
+            .background-container {
+                width: 600px;
+                height: fit-content;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 0;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+            }
+
             
 
            
@@ -255,165 +278,143 @@
     
 
     <body>
-        <br style = "height:20px;">
-        <div id = "title" class = "section" style="width: 98.6%; z-index: 1; height: 120px; border-radius: 0px; "> 
-            <br style = "height:20px;">
-            <img src = "title.png" class="boing" >
-            <br style = "height:20px;">
-            <br style = "height:20px;">
-        </div>
-        <div id = "poznavackovator">
         
-
-        
-
-        <br style = "height:20px;">
-
-        <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
-            <br style = "height:20px;">
-            <select class="ui" style="width: 100%; height: 50px;" >
-                <option class="ui" >1</option>
-                <option class="ui" >2</option>
-                <option class="ui" >3</option>
-                <option class="ui" >4</option>
-                <option class="ui" >5</option>
-            </select>
-
-
-            <div id = "switchContainer">
-                <button class = "boing ui" style="height: 30px;">nižší</button>
-                <label class="switch boing" >
-                    <input type="checkbox" id="toggleType" class="checkbox">
-                    <span class="slider"></span>
-                </label>
-                <button class = "boing ui" style="height: 30px;">vyšší</button>
+        <div class = "background-container" id = "title-BGC">
+            <div class = "foreground-container" id = "title-FGC">
+                <img src = "title.png" class="boing" id = "title">
             </div>
-            <br style = "height:20px;">
-
         </div>
 
-        
-        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute; ">
-            <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
-            <button  class="ui boing" style="width: 30%;" >load from file</button>
-            <button  class="ui boing" style="width: 30%;" onclick="savejson()">save to file</button>
-            <button  class="ui boing" style="width: 30%;" >edit file</button>
-        
-        </div>
-        
-        <div id = "customContainer" style="width: 600px; height: 55px; ">
-        </div>
+        <div id = "application-main">
 
-        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
+            <div class = "background-container" id = "options-BGC">
+                <div class = "foreground-container" id = "options-FGC">
+                    <select class = "ui" id = "select">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
 
-
-            <div id = "iDiv" style="background-color: black; width: 100px; height: 400px; position: absolute; left: -110px; top: 70px">
-
-            </div>
-
-            <div id = "info" class="ui">
-                <button class="ui boing" onclick="info()" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
-            </div>
-            <div id = "settings" class = "ui">
-                <button class="ui boing" onclick="settings()" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
-            </div>
-            <div class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10;">
-            
-
-                <div id = "imageDiv" class = "ui">
-
-                </div>
-
-                <div id = "underImage" class = "under">
-                    <button class = "ui field boing" id = "learnButton">learn</button>
-                    <button class = "ui field boing" id = "showButton">show</button>
-                </div>
-
-                <div id = "imageName" class = "ui">
-
-                </div>
-
-                <div id = "underName" class = "under" style="top:-20px">
-                    <div id = "clock" class = "ui field clockFont">
-                            00:00:01
-                    </div>
-                    <div id = "counter" class = "ui field clockFont">
-                            000001
+                    <div class = "secondary-container" id = "switch-SC">
+                        <button class = "boing ui" id = "nizsi-href">nižší</button>
+                        <label class="switch boing" >
+                            <input type="checkbox" id="switch" class="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                        <button class = "boing ui" id = "vyssi-href">vyšší</button>
                     </div>
                 </div>
 
-
+                <div class = "dropdown-container" id = "options-DC">
+                    <button class = "dropdown-button boing" id = "options-DDB" onclick="optionsDropdown()" >+</button>
+                    <button class="ui boing" >load from file</button>
+                    <button class="ui boing" >save to file</button>
+                    <button class="ui boing" >edit file</button>
+                </div>
             </div>
-            <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 315px;">
-                <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
-                
+        
+            <br class = "dropdown-spacer" id = "options-DDS">
+        
+            <div class = "background-container" id = "main-BGC">
+
+                <div class = "dropdown-container" id = "info"> <!--left-->
+                    <button onclick="expandInfo()" class = "ui boing"><img src = "i.png"></button>
+                </div>
+
+                <div class = "dropdown-container" id = "settings"> <!--right-->
+                    <button onclick="expandSettings()" class = "ui boing"><img src = "settings.png"></button>
+                </div>
+                <div class = "foreground-container" id = "main-FGC">
+                    <div class = "image-container" id = "main-IC">
+                        <img src="" id = "main-image">
+                    </div>
+
+                    <div class = "secondary-container" id = "main-LS-container">
+                        <button class = "ui boing main-input">learn</button>
+                        <button class = "ui boing main-input">show</button>
+                    </div>
+
+                    <div id = "main-image-name"></div>
+
+                    <div class = "secondary-container" id = "main-quick-info-container">
+                        <div class = "ui main-input 7-font" id = "clock">00:00:01</div>
+                        <div class = "ui main-input 7-font" id = "counter">000001</div>
+                    </div>
+                </div>
+
+                <div class = "dropdown-container" id = "main-DC">
+                    <button class = "dropdown-button boing" id = "main-DDB" onclick="mainDropdown()" >+</button>
                     
-                <div id = "listdiv">
-                    <ol id = "learned" style="column-count: 3;">
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                    </ol>
+                    <div id = "learned-C">
+                        <ol id = "learned" style="column-count: 3;">
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                            <li>thing1</li>
+                            <li>thing2</li>
+                            <li>thing3</li>
+                            <li>thing4</li>
+                        </ol>
+                    </div>
                 </div>
-            
+
             </div>
+        
         </div>
 
         
@@ -421,28 +422,14 @@
     </div>
 
     
-        <script>
-            function savejson(){
-                const json = {test: 'hello world'};
-
-                const blob = new Blob([JSON.stringify(json, null, 2)], {type : 'application/json'});
-                const url = URL.createObjectURL(blob);
-
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'data.json';
-
-                document.body.appendChild(link);
-                link.click();
-
-                document.body.removeChild(link);
-            }
-        </script>
+        
         
 
         <script>
-            var infoT = false;
-            var settingsT = false;
+            infoExpanded = false;
+            settingsExpanded = false;
+            optionsExpanded = false;
+            mainExpanded = false;
             function info(){
                 div = document.getElementById("info");
                 div.style.transition = "height 0.3s, width 0.3s, left 0.3s";
