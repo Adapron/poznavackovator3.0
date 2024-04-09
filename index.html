@@ -16,7 +16,11 @@
 </head>
 <body>
     <div id="map"></div>
-    <button id="addPinBtn" style="height: 100px; width: 100%; background-color: pink;">Add Pin</button>
+    <div style="display: flex; width: 100%;">
+        <button id="addPinBtn" style="flex: 1; height: 100px; background-color: pink;">add pin</button>
+        <button id="remove" style="flex: 1; height: 100px; background-color: pink;">undo last pin</button>
+      </div>
+      
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
 
     <script>
@@ -51,6 +55,8 @@
             realTimeLocationMarker.setLatLng([latitude, longitude]);
         }
 
+        var markers = [];
+
         document.getElementById('addPinBtn').addEventListener('click', function() {
             // Check if browser supports geolocation
             if (navigator.geolocation) {
@@ -59,12 +65,18 @@
 
                     
                     // Add a pin marker at the current location
-                    L.marker([latitude, longitude]).addTo(map)
+                    let newmarker = L.marker([latitude, longitude]).addTo(map)
                         .bindPopup('Typek').openPopup();
+                    markers.push(newmarker);
                 });
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
+        });
+
+        document.getElementById('remove').addEventListener('click', function() {
+            let lastElement = markers.pop();
+            lastElement.remove();
         });
 
         setInterval(() => {
