@@ -9,14 +9,14 @@
      crossorigin=""/>
     <style>
         #map {
-            height: 800px;
+            height: 500px;
             width: 100%;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
-    <button id="addPinBtn" style="height: 100px; width: 100%;">Add Pin</button>
+    <button id="addPinBtn" style="height: 100px; width: 100%; background-color: pink;">Add Pin</button>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
 
     <script>
@@ -34,22 +34,55 @@
             }).addTo(map);
         }
 
+
         initMap()
-        // Add event listener for the button click
+        var redIcon = L.icon({
+            iconUrl: 'https://cdn.discordapp.com/attachments/692362887821525064/1227335127760113777/product-8266_4a80b1c6-faef-47ec-ae6f-b74c92e597f5.png?ex=662807e9&is=661592e9&hm=750abef740382e98eac0c6908eef38f56477cf758ac89611fbdefa0ebe292a65&',
+            iconSize: [15, 15],
+            iconAnchor: [7, 7],
+        });
+        realTimeLocationMarker = L.marker([0, 0], {icon: redIcon}).addTo(map);
+        // Create a marker for the real-time location dot
+    
+
+        // Function to update real-time location marker
+        function updateRealTimeLocationMarker(latitude, longitude) {
+            // Update the marker's position
+            realTimeLocationMarker.setLatLng([latitude, longitude]);
+        }
+
         document.getElementById('addPinBtn').addEventListener('click', function() {
             // Check if browser supports geolocation
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const { latitude, longitude } = position.coords;
+
                     
                     // Add a pin marker at the current location
                     L.marker([latitude, longitude]).addTo(map)
-                        .bindPopup('Your Location').openPopup();
+                        .bindPopup('Typek').openPopup();
                 });
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
         });
+
+        setInterval(() => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const { latitude, longitude } = position.coords;
+                    updateRealTimeLocationMarker(latitude, longitude);
+
+                
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }, 3000);
+
+
+        // Add event listener for the button click
+        
 
     </script>
 </body>
