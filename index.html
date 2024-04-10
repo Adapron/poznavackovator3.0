@@ -9,7 +9,7 @@
      crossorigin=""/>
     <style>
         #map {
-            height: 500px;
+            height: 1000px;
             width: 100%;
         }
     </style>
@@ -24,13 +24,24 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
 
     <script>
+
+        
+
+        document.getElementById('map').style.height = window.screen.height;
+
+        var latitude  = 0;
+        var longitude = 0;
         // script.js
+        var posSet = false;
 
         // Initialize the map
         let map;
 
         function initMap() {
-            map = L.map('map').setView([51.505, -0.09], 13); // Initial map view
+            
+            map = L.map('map').setView([latitude, longitude], 13); // Initial map view
+
+            
             
             // Add OpenStreetMap tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -55,20 +66,21 @@
             realTimeLocationMarker.setLatLng([latitude, longitude]);
         }
 
+        
+        
         var markers = [];
 
         document.getElementById('addPinBtn').addEventListener('click', function() {
             // Check if browser supports geolocation
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const { latitude, longitude } = position.coords;
+                
+                    
 
                     
                     // Add a pin marker at the current location
                     let newmarker = L.marker([latitude, longitude]).addTo(map)
-                        .bindPopup('Typek').openPopup();
                     markers.push(newmarker);
-                });
+                
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
@@ -82,7 +94,15 @@
         setInterval(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    const { latitude, longitude } = position.coords;
+                    var pos = position.coords
+                    latitude = pos.latitude;
+                    longitude = pos.longitude;
+                    console.log("now");
+                    if(!posSet){
+                        posSet = true;
+                        
+                        map.setView([latitude, longitude], 13);
+                    }
                     updateRealTimeLocationMarker(latitude, longitude);
 
                 
@@ -90,7 +110,7 @@
             } else {
                 alert('Geolocation is not supported by your browser.');
             }
-        }, 3000);
+        }, 2);
 
 
         // Add event listener for the button click
