@@ -19,6 +19,7 @@
     <div style="display: flex; width: 100%;">
         <button id="addPinBtn" style="flex: 1; height: 100px; background-color: pink;">add pin</button>
         <button id="remove" style="flex: 1; height: 100px; background-color: pink;">undo last pin</button>
+        <button id="center" style="flex: 0.2; height: 100px; background-color: rgb(25, 0, 255);">undo last pin</button>
       </div>
       
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
@@ -89,6 +90,10 @@
         document.getElementById('remove').addEventListener('click', function() {
             let lastElement = markers.pop();
             lastElement.remove();
+        });
+
+        document.getElementById('center').addEventListener('click', function() {
+            map.setView([latitude, longitude], 13);
         });
 
         setInterval(() => {
