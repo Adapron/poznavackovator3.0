@@ -31,6 +31,18 @@
                 display: none;
             }
 
+            #overlay {
+                display: none; /* Hide the overlay by default */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+                z-index: 9998; /* Ensure it appears behind the popup */
+            }
+
+
             .slider {
                 position: absolute;
                 cursor: pointer;
@@ -205,6 +217,25 @@
 				overflow: hidden;
             }
 
+            #popup {
+                position: fixed; /* or absolute */
+                top: 150%; /* Position it vertically in the middle */
+                left: 50%; /* Position it horizontally in the middle */
+                transform: translate(-50%, -50%); /* Center the div */
+                z-index: 9999; /* Ensure it appears above other elements */
+                
+                transition: top 0.3s ease; /* Add transition for smooth sliding animation */
+
+                /* Add more styling as needed */
+            }
+
+
+            body.blur {
+                filter: blur(5px); /* Adjust the blur amount as needed */
+                pointer-events: none; /* Ensure the blurred content is not clickable */
+            }
+
+
 			#drag-drop-area {
             border: 2px dashed #ccc;
 			width: 99.3%;
@@ -216,7 +247,9 @@
                 rgb(255, 255, 255) 40px,
                 rgb(240, 240, 240) 40px,
                 rgb(240, 240, 240) 80px
-            );          
+            );     
+
+
 
 			}
 				.drag-over {
@@ -525,6 +558,13 @@
 
     </div>
 
+
+    <div id="overlay" onclick="settings()" style="filter: none;"></div>
+    <div id="popup" class="ui" style="background-color: white; width: 600px; height: 300px;filter: none;">
+        <!-- Popup content goes here -->
+    </div>
+    
+
     
         <script>
             function savejson(){
@@ -561,6 +601,17 @@
 			var currentlyLoadedPzn = {data: [["firstName", ["img1","img2"]]]};
 			var imageIndex = 0;
 			var imageLinks = [];
+
+            function showPopup() {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('popup').style.top = '50%';
+            }
+
+            // Function to hide the popup
+            function hidePopup() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('popup').style.top = '150%';
+            }
 
 			function RemoveCustomThing() {
 				currentlyLoadedPzn[data].splice(imageIndex, 1);
@@ -659,18 +710,20 @@
             }
 
             function settings(){
-                div = document.getElementById("settings");
-                div.style.transition = "height 0.3s, width 0.3s, right 0.3s";
+                //div = document.getElementById("settings");
+                //div.style.transition = "height 0.3s, width 0.3s, right 0.3s";
 
                 if(settingsT){
-                    div.style.width = "100px";
-                    div.style.height = "50px";
-                    div.style.right = "-50px";
+                    //div.style.width = "100px";
+                    //div.style.height = "50px";
+                    //div.style.right = "-50px";
+                    hidePopup();
                     settingsT = false;
                 }else{
-                    div.style.width = "200px";
-                    div.style.height = "500px";
-                    div.style.right = "-150px";
+                    //div.style.width = "200px";
+                    //div.style.height = "500px";
+                    //div.style.right = "-150px";
+                    showPopup();
                     settingsT = true;
                 }
             }
