@@ -98,6 +98,7 @@
                 border-width: 0px;
                 box-shadow: 0 0 50px 5px #a3289380;
                 background-color: white;
+                
             }
 
             .customDropDown {
@@ -169,6 +170,12 @@
                 width: 80%
                 
             }
+
+            #learned li:hover {
+                font-weight: bold;
+            }
+
+
             #listdiv {
                 width: 100%;
                 height: 70%;
@@ -195,7 +202,7 @@
 				flex-wrap: wrap;
             }
 
-            #imageName{
+            .imageName{
                 width: 100%;
                 height: 50px;
                 position: relative;
@@ -209,12 +216,13 @@
                 top: 0px;
             }
 
-            #imageDiv {
+            .imageDiv {
                 width: 100%;
                 height: 300px;
                 position: relative;
                 top: 30px;
 				overflow: hidden;
+                margin-bottom: 30px;
             }
 
             #popup {
@@ -282,6 +290,9 @@
                 gap: 20px;
                 position: relative;
                 top: 15px;
+                margin-bottom: 30px;
+                align-items: center;
+                justify-content: center;
 
             }
 
@@ -386,7 +397,7 @@
         
         <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute; ">
             <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
-            <button  class="ui boing" style="width: 30%;" >load from file</button>
+            <button  class="ui boing" style="width: 30%;" onclick="importJSON()">load from file</button>
             <button  class="ui boing" style="width: 30%;" onclick="savejson()">save to file</button>
             <button  class="ui boing" style="width: 30%;" >edit file</button>
         
@@ -409,10 +420,10 @@
                 <button class="ui boing" onclick="settings()" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
             </div>
 
-            <div id = "editor" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10;">
+            <div id = "editor" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
             
 
-                <div id = "imageDiv" class = "ui">
+                <div id = "imageDiv" class = "imageDiv ui ">
 					<div id="drag-drop-area" style="align-items: center; display:flex; justify-content: center; ">
 						
                         <button id="removeCustomThing" style="display: none; position: absolute;" onclick="RemoveCustomThing()">remove this</button>
@@ -426,7 +437,7 @@
 					<button onclick="ImageRight()" class="ui boing" id = "imageArrowRight" style = "width: 20px; height: 20px; position: absolute; top: 50%; right: 5px; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380; ">></button>
                 </div>
 
-                <div id = "underImage" class = "under">
+                <div id = "underImage" class = "under" >
                     <a id="imgCounder" class = "ui field clockFont">1/1</a>
 
                 </div>
@@ -437,43 +448,31 @@
 
                 
 
-                <div id = "underName" class = "under" style="top:-20px">
-                    
-                </div>
+                
 
 
             </div>
 
-            <div id = "poznavačkovator" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
+            <div id = "poznavačkovator" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
             
 
-                <div id = "imageDiv" class = "ui">
-					<div id="drag-drop-area" style="align-items: center;">
-						<a id="imgCounder">1/1</a>
-						<input id = "enteredName"  placeholder="enter name">
-						<button id="removeCustomThing" style="display: none;" onclick="RemoveCustomThing()">remove this</button>
+                <img id = "imageDivPzn" class = "ui imageDiv" onclick="sameName()">
+					
 
-						<ul id="photo-list">
-						</ul>
-					</div>
-					<button onclick="ImageLeft()" class="ui boing" id = "imageArrowLeft" style = "width: 20px; left: 5px; height: 20px; position: absolute; top: 50%; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380;"><</button>
-					<button onclick="ImageRight()" class="ui boing" id = "imageArrowRight" style = "width: 20px; height: 20px; position: absolute; top: 50%; right: 5px; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380; ">></button>
+                <div id = "underImagePzn" class = "under">
+                    <button class = "ui field boing" id = "learnButton" onclick="pznLearn()">learn</button>
+                    <button class = "ui field boing" id = "showButton" onclick ="pznShow()">show</button>
                 </div>
 
-                <div id = "underImage" class = "under">
-                    <button class = "ui field boing" id = "learnButton">learn</button>
-                    <button class = "ui field boing" id = "showButton">show</button>
-                </div>
-
-                <div id = "imageName" class = "ui">
+                <div id = "imageNamePzn" class = "ui imageName" style="margin-bottom: 40px;">
 
                 </div>
 
-                <div id = "underName" class = "under" style="top:-20px">
-                    <div id = "clock" class = "ui field clockFont">
+                <div id = "underNamePzn" class = "under" style="top:-20px">
+                    <div id = "clockPzn" class = "ui field clockFont">
                             00:00:01
                     </div>
-                    <div id = "counter" class = "ui field clockFont">
+                    <div id = "counterPzn" class = "ui field clockFont">
                             000001
                     </div>
                 </div>
@@ -488,66 +487,7 @@
                     
                 <div id = "listdiv">
                     <ol id = "learned" style="column-count: 3;">
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
-                        <li>thing1</li>
-                        <li>thing2</li>
-                        <li>thing3</li>
-                        <li>thing4</li>
+                        
                     </ol>
                 </div>
             
@@ -568,7 +508,7 @@
     
         <script>
             function savejson(){
-                const json = {test: 'hello world'};
+                const json = currentlyLoadedPzn;
 
                 const blob = new Blob([JSON.stringify(json, null, 2)], {type : 'application/json'});
                 const url = URL.createObjectURL(blob);
@@ -588,6 +528,7 @@
 		<script>
 			const imgCounder = document.getElementById("imgCounder");
 			const data = "data"
+            var imgData = {};
 			const enteredName = document.getElementById("enteredName");
 			const dragDropArea = document.getElementById('drag-drop-area');
 			const photoList = document.getElementById('photo-list');
@@ -598,9 +539,8 @@
 			const imageArrowLeft = document.getElementById("imageArrowLeft");
 			const imageArrowRight = document.getElementById("imageArrowRight");
 
-			var currentlyLoadedPzn = {data: [["firstName", ["img1","img2"]]]};
+			var currentlyLoadedPzn = {data: [["firstName", []]]};
 			var imageIndex = 0;
-			var imageLinks = [];
 
             function showPopup() {
                 document.getElementById('overlay').style.display = 'block';
@@ -619,14 +559,46 @@
 				loadCustomEditor(imageIndex);
 			}
 
+            function updateList(index) {
+                
+                var list = document.getElementById('learned');
+                list.innerHTML = ''; // Clear existing list items
+                
+                // Loop through the array and create list items
+                currentlyLoadedPzn[data].forEach(
+                    function(item, index) {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = item[0];
+                        
+                        // Add click event listener to each list item
+                        listItem.addEventListener('click', function() {
+                            // Retrieve the index of the clicked item
+                            var clickedIndex = index;
+                            console.log('Clicked index:', clickedIndex);
+
+                            currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
+
+                            imageIndex = clickedIndex;
+
+                            loadCustomEditor(imageIndex);
+                            // You can perform further actions with the clicked index here
+                        });
+                        
+                        list.appendChild(listItem); // Append the list item to the list
+                    }
+                );
+                
+            }
+
 			function loadCustomEditor(index){
 				wipePhotoList()
+
+                updateList(index);
 				imgCounder.innerHTML = imageIndex+1+"/"+currentlyLoadedPzn[data].length;
 				console.log("loading " + index)
-				imageLinks = currentlyLoadedPzn[data][index][1];
 				enteredName.value = currentlyLoadedPzn[data][index][0];
 
-				if(imageLinks.length == 0 && imageIndex != 0){
+				if(currentlyLoadedPzn[data][index][1].length == 0 && imageIndex != 0){
 					removeCustomThing.style.display = "block"
 				}else{
 					removeCustomThing.style.display = "none"
@@ -649,10 +621,11 @@
 				}
 			}
 
+
+
 			function ImageLeft(){
 				if(imageIndex == 0) return;
 
-				currentlyLoadedPzn[data][imageIndex][1] = imageLinks;
 				currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
 
 				imageIndex--;
@@ -667,7 +640,6 @@
 				console.log(currentlyLoadedPzn[data].length + " " + imageIndex)
 				if(imageIndex == currentlyLoadedPzn[data].length - 1){currentlyLoadedPzn[data].push(["",[]])}
 
-				currentlyLoadedPzn[data][imageIndex][1] = imageLinks;
 				currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
 
 				imageIndex++;
@@ -819,11 +791,66 @@
                 
             }
 
+            var pickedIndex = -1;
+            var displayedIndex = -1;
+            var pickedName = "";
+            var pickedImages = [];
+            var pznLearned = [];
+            var pznLearnedNames = [];
+            var displayingName = false;
+            function setupPzn(){
+                pickRandom();
+            }
+
+            function pickRandom(){
+                const availableIndices = currentlyLoadedPzn[data]
+                    .map((_, index) => index)
+                    .filter(index => !pznLearned.includes(index));
+
+                pickedIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                pickedName = currentlyLoadedPzn[data][pickedIndex][0];
+                pickedImages = currentlyLoadedPzn[data][pickedIndex][1];
+                
+                //display
+                console.log("displaying");
+                displayedIndex = 0;
+                document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
+            }
+
+            function pznLearn(){
+                var name = currentlyLoadedPzn[data][pickedIndex][0];
+                pznLearned.push(pickedIndex);
+                pznLearnedNames.push(name);
+            }
+
+            function pznShow() {
+                if(displayingName){
+                    //hidename
+                    document.getElementById("imageNamePzn").innerHTML = "";
+                    pickRandom();
+                    displayingName = false;
+                }
+                else{
+                    document.getElementById("imageNamePzn").innerHTML = pickedName;
+                    //showname
+                    displayingName = true;
+                }
+
+            }
+
+            function sameName(){
+                displayedIndex++;
+                displayedIndex = displayedIndex % pickedImages.length;
+                document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
+            }
+
+
+
             async function importJSON() {
                 try {
                     var data = await inputFile();
-                    var input = data.input;
-                    document.getElementById('input').value = input;
+                    currentlyLoadedPzn = data;
+                    setupPzn()
                 } catch (error) {
                     console.error('Error:', error);
                 }
@@ -877,7 +904,9 @@
 				// Check if the dropped link corresponds to a photo
 				if (isPhotoLink(link)) {
 					// Add the photo to the list
-					imageLinks.push(link);
+                    currentlyLoadedPzn.data[imageIndex][1].push(link);
+                    
+                    
 					loadCustomEditor(imageIndex);
 
 				}
