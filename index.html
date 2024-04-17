@@ -947,6 +947,8 @@
                     var data = await inputFile();
                     currentlyLoadedPzn = data;
                     setupPzn()
+                    loadCustomEditor(0)
+
                 } catch (error) {
                     console.error('Error:', error);
                 }
