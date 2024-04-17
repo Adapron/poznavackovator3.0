@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap Web App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <style>
+        #map {
+            height: 600px;
+            width: 98%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div style="display: flex; width: 100%;">
+        <button id="addPinBtn" style="flex: 1; height: 100px; background-color: pink;">add pin</button>
+        <button id="remove" style="flex: 1; height: 100px; background-color: pink;">undo last pin</button>
+        <button id="center" style="flex: 0.2; height: 100px; background-color: rgb(25, 0, 255);">jump to pos</button>
+        <button id="wipe" style="flex: 0.2; height: 100px; background-color: rgb(25, 0, 255);">wipe cookies</button>
+      </div>
+      
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
+
+    <script>
+
+
+        function wipeCookies() {
+            // Get all cookies
+            const cookies = document.cookie.split(';');
+
+            // Loop through each cookie and set its expiry date in the past to delete it
+            cookies.forEach(cookie => {
+                const cookieParts = cookie.split('=');
+                const cookieName = cookieParts[0].trim();
+                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            });
+        }
+
+        document.getElementById('map').style.height = window.screen.height;
+
+        var latitude  = 0;
+        var longitude = 0;
+        var tracking = true;
+        // script.js
+        var posSet = false;
+
+        // Initialize the map
+        let map;
+
+        function save(array) {
+            // Convert the array to a JSON string
+            const jsonString = JSON.stringify(array);
+            // Set the JSON string as a cookie
+            document.cookie = `array=${jsonString};`;
+        }
+
+        // Function to load the array from cookies
+        function load() {
+            // Get the cookie string
+            const cookieString = document.cookie;
+            // Split the cookie string by semicolons to get individual cookies
+            const cookies = cookieString.split(';');
+            // Initialize an empty array to store the loaded array
+            let loadedArray = [];
+
+            // Loop through each cookie
+            cookies.forEach(cookie => {
+                // Trim any leading or trailing whitespace from the cookie
+                const trimmedCookie = cookie.trim();
+                // Check if the cookie starts with 'array='
+                if (trimmedCookie.startsWith('array=')) {
+                    // Extract the JSON string from the cookie (remove 'array=')
+                    const jsonString = trimmedCookie.substring(6);
+                    // Parse the JSON string to convert it back to an array
+                    loadedArray = JSON.parse(jsonString);
+                }
+            });
+
+            // Return the loaded array
+            return loadedArray;
+        }
+
+        function initMap() {
+            
+            map = L.map('map').setView([latitude, longitude], 13); // Initial map view
+
+            
+            
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+
+        initMap()
+        var redIcon = L.icon({
+            iconUrl: 'https://cdn.discordapp.com/attachments/692362887821525064/1227335127760113777/product-8266_4a80b1c6-faef-47ec-ae6f-b74c92e597f5.png?ex=662807e9&is=661592e9&hm=750abef740382e98eac0c6908eef38f56477cf758ac89611fbdefa0ebe292a65&',
+            iconSize: [15, 15],
+            iconAnchor: [7, 7],
+        });
+        realTimeLocationMarker = L.marker([0, 0], {icon: redIcon}).addTo(map);
+        // Create a marker for the real-time location dot
+    
+
+        // Function to update real-time location marker
+        function updateRealTimeLocationMarker(latitude, longitude) {
+            // Update the marker's position
+            realTimeLocationMarker.setLatLng([latitude, longitude]);
+        }
+
+        function movestart(){
+            tracking = false;
+        }
+
+        map.on("movestart", movestart)
+
+        
+        
+        var markers = [];
+        var coordsMarkers = [];
+
+
+        coordsMarkers = load();
+        if(coordsMarkers && coordsMarkers.length > 0 && coordsMarkers[0][0]){
+            coordsMarkers.forEach(element => {
+            let newmarker = L.marker([element[0], element[1]]).addTo(map)
+            markers.push(newmarker);
+        });
+        }
+        
+
+        document.getElementById('addPinBtn').addEventListener('click', function() {
+            // Check if browser supports geolocation
+            if (navigator.geolocation) {
+                
+                    
+
+                    
+                    // Add a pin marker at the current location
+                    let newmarker = L.marker([latitude, longitude]).addTo(map)
+                    coordsMarkers.push((latitude, longitude));
+                    markers.push(newmarker);
+                    save(coordsMarkers);
+
+
+                
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        });
+
+        document.getElementById('remove').addEventListener('click', function() {
+            let lastElement = markers.pop();
+            coordsMarkers.pop()
+            lastElement.remove();
+        });
+
+        document.getElementById('center').addEventListener('click', function() {
+            map.setView([latitude, longitude], 17);
+            tracking = true;
+        });
+
+        document.getElementById('wipe').addEventListener('click', function() {
+            alert("wipúing")
+            wipeCookies();
+        });
+
+        setInterval(() => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = position.coords
+                    latitude = pos.latitude;
+                    longitude = pos.longitude;
+                    console.log("now");
+                    if(!posSet){
+                        posSet = true;
+                        
+                        map.setView([latitude, longitude], 16);
+                    }
+                    updateRealTimeLocationMarker(latitude, longitude);
+
+                
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }, 500);
+
+
+        // Add event listener for the button click
+        
+
+    </script>
+</body>
+</html>

@@ -1,200 +1,1057 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenStreetMap Web App</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
-    <style>
-        #map {
-            height: 600px;
-            width: 98%;
-        }
-    </style>
-</head>
-<body>
-    <div id="map"></div>
-    <div style="display: flex; width: 100%;">
-        <button id="addPinBtn" style="flex: 1; height: 100px; background-color: pink;">add pin</button>
-        <button id="remove" style="flex: 1; height: 100px; background-color: pink;">undo last pin</button>
-        <button id="center" style="flex: 0.2; height: 100px; background-color: rgb(25, 0, 255);">jump to pos</button>
-        <button id="wipe" style="flex: 0.2; height: 100px; background-color: rgb(25, 0, 255);">wipe cookies</button>
-      </div>
-      
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ></script>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JSON Import/Export</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-    <script>
+            .centered-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh; /* Set the height of the container to the viewport height */
+            }
+
+            /* Make the text big */
+            .big-text {
+                font-size: 3em; /* Adjust the font size as needed */
+            }
+            #poznavackovator{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+            }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+                top: 12px;
+                margin: 0 10px;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            #overlay {
+                display: none; /* Hide the overlay by default */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+                z-index: 9998; /* Ensure it appears behind the popup */
+            }
 
 
-        function wipeCookies() {
-            // Get all cookies
-            const cookies = document.cookie.split(';');
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ffd7fd;
+                transition: 0.4s;
+                border-radius: 34px;
+            }
 
-            // Loop through each cookie and set its expiry date in the past to delete it
-            cookies.forEach(cookie => {
-                const cookieParts = cookie.split('=');
-                const cookieName = cookieParts[0].trim();
-                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-            });
-        }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: 0.4s;
+                border-radius: 50%;
+            }
 
-        document.getElementById('map').style.height = window.screen.height;
+            .checkbox:checked + .slider {
+                background-color: #a3289380;
+            }
 
-        var latitude  = 0;
-        var longitude = 0;
-        var tracking = true;
-        // script.js
-        var posSet = false;
+            .checkbox:checked + .slider:before {
+                transform: translateX(26px);
+            }
 
-        // Initialize the map
-        let map;
+            .section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
 
-        function save(array) {
-            // Convert the array to a JSON string
-            const jsonString = JSON.stringify(array);
-            // Set the JSON string as a cookie
-            document.cookie = `array=${jsonString};`;
-        }
+                justify-content: space-between;
+                padding: 0 20px;
 
-        // Function to load the array from cookies
-        function load() {
-            // Get the cookie string
-            const cookieString = document.cookie;
-            // Split the cookie string by semicolons to get individual cookies
-            const cookies = cookieString.split(';');
-            // Initialize an empty array to store the loaded array
-            let loadedArray = [];
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
 
-            // Loop through each cookie
-            cookies.forEach(cookie => {
-                // Trim any leading or trailing whitespace from the cookie
-                const trimmedCookie = cookie.trim();
-                // Check if the cookie starts with 'array='
-                if (trimmedCookie.startsWith('array=')) {
-                    // Extract the JSON string from the cookie (remove 'array=')
-                    const jsonString = trimmedCookie.substring(6);
-                    // Parse the JSON string to convert it back to an array
-                    loadedArray = JSON.parse(jsonString);
+                background-color: white;
+                border-radius: 10px;
+
+                z-index: 1;
+            }
+
+            .ui {
+                height: 30px;
+                border-radius: 10px;
+                border-width: 0px;
+                box-shadow: 0 0 50px 5px #a3289380;
+                background-color: white;
+                
+            }
+
+            .customDropDown {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 0;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+
+                transition: transform 0.3s;
+                transform: translateY(-110px);
+                position: absolute;
+                top: 295px;
+
+            }
+
+            
+
+            
+
+            .slidedDropDown{
+                transform: translateY(-30px);
+            }
+
+            .slidedDropDownMain{
+                transform: translateY(+200px);
+            }
+        
+            .dropDownButton{
+                border: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding: 10px;
+                background-color: #00000000;
+            }
+
+
+            .boing {
+                transition: transform 0.1s linear;
+            }
+
+            .boing:active {
+                transform: scale(0.9);
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
                 }
-            });
+                50% {
+                    transform: scale(0.90);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            #learned {
+                height: fit-content;
+                width: 80%
+                
+            }
 
-            // Return the loaded array
-            return loadedArray;
-        }
+            #learned li:hover {
+                font-weight: bold;
+            }
 
-        function initMap() {
+
+            #listdiv {
+                width: 100%;
+                height: 70%;
+                position: relative;
+                border-radius: 10px;
+                top:10px;
+                background-color: rgb(255, 255, 255);
+                box-shadow: 0 0 50px 5px #9e589580;
+                overflow-y: auto;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+			#photo-list {
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+				
+				overflow-wrap: normal;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+				flex-wrap: wrap;
+            }
+
+            .imageName{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                top: 0px;
+            }
+
+            #enteredName{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                top: 0px;
+            }
+
+            .imageDiv {
+                width: 100%;
+                height: 300px;
+                position: relative;
+                top: 30px;
+				overflow: hidden;
+                margin-bottom: 30px;
+            }
+
+            #popup {
+                position: fixed; /* or absolute */
+                top: 150%; /* Position it vertically in the middle */
+                left: 50%; /* Position it horizontally in the middle */
+                transform: translate(-50%, -50%); /* Center the div */
+                z-index: 9999; /* Ensure it appears above other elements */
+                
+                transition: top 0.3s ease; /* Add transition for smooth sliding animation */
+
+                /* Add more styling as needed */
+            }
+
+
+            body.blur {
+                filter: blur(5px); /* Adjust the blur amount as needed */
+                pointer-events: none; /* Ensure the blurred content is not clickable */
+            }
+
+
+			#drag-drop-area {
+            border: 2px dashed #ccc;
+			width: 99.3%;
+			height: 98.9%;
+            text-align: center;
+            background: repeating-linear-gradient(
+                45deg,
+                rgb(255, 255, 255),
+                rgb(255, 255, 255) 40px,
+                rgb(240, 240, 240) 40px,
+                rgb(240, 240, 240) 80px
+            );     
+
+
+
+			}
+				.drag-over {
+                    background: repeating-linear-gradient(
+                        45deg,
+                        rgb(255, 255, 255),
+                        rgb(255, 255, 255) 40px,
+                        rgb(230, 230, 230) 40px,
+                        rgb(230, 230, 230) 80px
+                );    
+					
+				}
+				#photo-list {
+                    justify-content: center;
+					list-style-type: none;
+					padding: 0;
+					display: flex;
+				}
+				#photo-list img {
+					width: 100px;
+					height: 100px;
+                    padding-top: 10px;
+					margin-right: 10px;
+					cursor: pointer;
+				}
+
+            .under {
+                align-items: center;
+                display: flex;
+                gap: 20px;
+                position: relative;
+                top: 15px;
+                margin-bottom: 30px;
+                align-items: center;
+                justify-content: center;
+
+            }
+
+            @font-face {
+                font-family: 'SevenSegment';
+                src:    url('font.woff2') format('woff2'),
+                        url('font.ttf') format('truetype'),
+                        url('font.woff') format('woff');
+                /* Add more font formats as needed for cross-browser support */
+                /* Replace 'path/to/seven-segment-font' with the actual path to the font files */
+            }
+
+            .field {
+                height: 50px;
+                width: 290px;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+            }
+
+            .clockFont{
+                font-family: 'SevenSegment', Arial, sans-serif;
+            }
+
+
+
+            #info {
+                position: absolute;
+                top: 10px;
+                left: -50px;
+                width: 100px;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
+
+            #settings {
+                position: absolute;
+                top: 10px;
+                right: -50px;
+                width: 100px;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
+
             
-            map = L.map('map').setView([latitude, longitude], 13); // Initial map view
 
-            
-            
-            // Add OpenStreetMap tile layer
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        }
+           
+        </style>
+    </head>
 
-
-        initMap()
-        var redIcon = L.icon({
-            iconUrl: 'https://cdn.discordapp.com/attachments/692362887821525064/1227335127760113777/product-8266_4a80b1c6-faef-47ec-ae6f-b74c92e597f5.png?ex=662807e9&is=661592e9&hm=750abef740382e98eac0c6908eef38f56477cf758ac89611fbdefa0ebe292a65&',
-            iconSize: [15, 15],
-            iconAnchor: [7, 7],
-        });
-        realTimeLocationMarker = L.marker([0, 0], {icon: redIcon}).addTo(map);
-        // Create a marker for the real-time location dot
     
 
-        // Function to update real-time location marker
-        function updateRealTimeLocationMarker(latitude, longitude) {
-            // Update the marker's position
-            realTimeLocationMarker.setLatLng([latitude, longitude]);
-        }
-
-        function movestart(){
-            tracking = false;
-        }
-
-        map.on("movestart", movestart)
-
-        
-        
-        var markers = [];
-        var coordsMarkers = [];
-
-
-        coordsMarkers = load();
-        if(coordsMarkers && coordsMarkers.length > 0 && coordsMarkers[0][0]){
-            coordsMarkers.forEach(element => {
-            let newmarker = L.marker([element[0], element[1]]).addTo(map)
-            markers.push(newmarker);
-        });
-        }
+    <body>
+        <br style = "height:20px;">
+        <div id = "title" class = "section" style="width: 98.6%; z-index: 1; height: 120px; border-radius: 0px; "> 
+            <br style = "height:20px;">
+            <img src = "title.png" class="boing" >
+            <br style = "height:20px;">
+            <br style = "height:20px;">
+        </div>
+        <div id = "poznavackovator">
         
 
-        document.getElementById('addPinBtn').addEventListener('click', function() {
-            // Check if browser supports geolocation
-            if (navigator.geolocation) {
+        
+
+        <br style = "height:20px;">
+
+        <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
+            <br style = "height:20px;">
+            <select class="ui" style="width: 100%; height: 50px;" >
+                <option class="ui" >1</option>
+                <option class="ui" >2</option>
+                <option class="ui" >3</option>
+                <option class="ui" >4</option>
+                <option class="ui" >5</option>
+            </select>
+
+
+            <div id = "switchContainer">
+                <button class = "boing ui" style="height: 30px;">nižší</button>
+                <label class="switch boing" >
+                    <input type="checkbox" id="toggleType" class="checkbox">
+                    <span class="slider"></span>
+                </label>
+                <button class = "boing ui" style="height: 30px;">vyšší</button>
+            </div>
+            <br style = "height:20px;">
+
+        </div>
+
+        
+        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute; ">
+            <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
+            <button  class="ui boing" style="width: 30%;" onclick="importJSON()">load from file</button>
+            <button  class="ui boing" style="width: 30%;" onclick="savejson()">save to file</button>
+            <button  class="ui boing" style="width: 30%;" id="editmode" onclick="editMode()">edit mode</button>
+        
+        </div>
+        
+        <div id = "customContainer" style="width: 600px; height: 55px; ">
+        </div>
+
+        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
+
+
+
+            <div id = "info" class="ui">
+                <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+            <div id = "settings" class = "ui">
+                <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+
+            <div id = "editor" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
+            
+
+                <div id = "imageDiv" class = "imageDiv ui ">
+					<div id="drag-drop-area" style="align-items: center; display:flex; justify-content: center; ">
+						
+                        <button id="removeCustomThing" style="display: none; position: absolute;" onclick="RemoveCustomThing()">remove this</button>
+
+						<ul id="photo-list">
+
+
+						</ul>
+					</div>
+					<button onclick="ImageLeft()" class="ui boing" id = "imageArrowLeft" style = "width: 20px; left: 5px; height: 20px; position: absolute; top: 50%; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380;"><</button>
+					<button onclick="ImageRight()" class="ui boing" id = "imageArrowRight" style = "width: 20px; height: 20px; position: absolute; top: 50%; right: 5px; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380; ">></button>
+                </div>
+
+                <div id = "underImage" class = "under" >
+                    <a id="imgCounder" class = "ui field clockFont">1/1</a>
+
+                </div>
+
+                
+                <input id = "enteredName"  placeholder="enter name" class = "ui">
+
+
+                
+
+                
+
+
+            </div>
+
+            <div id = "poznavackovatorField" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
+            
+
+                <img id = "imageDivPzn" class = "ui imageDiv" onclick="sameName()">
+					
+
+                <div id = "underImagePzn" class = "under">
+                    <button class = "ui field boing" id = "showButton" onclick ="pznShow()">show</button>
+                    <button class = "ui field boing" id = "learnButton" onclick="pznLearn()">learn</button>
+                </div>
+
+                <div id = "imageNamePzn" class = "ui imageName centered-text big-text" style="margin-bottom: 40px;">
+
+                </div>
+
+                <div id = "underNamePzn" class = "under" style="top:-20px">
+                    <div id = "clockPzn" class = "ui field clockFont">
+                            00:00:01
+                    </div>
+                    <div id = "counterPzn" class = "ui field clockFont">
+                            000001
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 315px;">
+                <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
                 
                     
-
-                    
-                    // Add a pin marker at the current location
-                    let newmarker = L.marker([latitude, longitude]).addTo(map)
-                    coordsMarkers.push((latitude, longitude));
-                    markers.push(newmarker);
-                    save(coordsMarkers);
-
-
-                
-            } else {
-                alert('Geolocation is not supported by your browser.');
-            }
-        });
-
-        document.getElementById('remove').addEventListener('click', function() {
-            let lastElement = markers.pop();
-            coordsMarkers.pop()
-            lastElement.remove();
-        });
-
-        document.getElementById('center').addEventListener('click', function() {
-            map.setView([latitude, longitude], 17);
-            tracking = true;
-        });
-
-        document.getElementById('wipe').addEventListener('click', function() {
-            alert("wipúing")
-            wipeCookies();
-        });
-
-        setInterval(() => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = position.coords
-                    latitude = pos.latitude;
-                    longitude = pos.longitude;
-                    console.log("now");
-                    if(!posSet){
-                        posSet = true;
+                <div id = "listdiv">
+                    <ol id = "learned" style="column-count: 3;">
                         
-                        map.setView([latitude, longitude], 16);
-                    }
-                    updateRealTimeLocationMarker(latitude, longitude);
+                    </ol>
+                </div>
+            
+            </div>
+        </div>
 
-                
-                });
-            } else {
-                alert('Geolocation is not supported by your browser.');
-            }
-        }, 500);
-
-
-        // Add event listener for the button click
         
 
-    </script>
-</body>
+    </div>
+
+
+    <div id="overlay" onclick="settings()" style="filter: none;"></div>
+    <div id="popup" class="ui" style="background-color: white; width: 600px; height: 300px;filter: none;">
+        <!-- Popup content goes here -->
+    </div>
+    
+
+    
+        <script>
+            function savejson(){
+                const json = currentlyLoadedPzn;
+
+                const blob = new Blob([JSON.stringify(json, null, 2)], {type : 'application/json'});
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'data.json';
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+            }
+        </script>
+
+        <script>
+            let timerValue = 0;
+            let intervalId;
+
+            function startTimer() {
+                intervalId = setInterval(() => {
+                    timerValue++;
+                    updateTimerDisplay();
+                }, 1000); // Update timer every second (1000 milliseconds)
+            }
+            startTimer();
+            function resetTimer() {
+                clearInterval(intervalId);
+                timerValue = 0;
+                updateTimerDisplay();
+            }
+
+            function updateTimerDisplay() {
+                const hours = Math.floor(timerValue / 3600);
+                const minutes = Math.floor((timerValue % 3600) / 60);
+                const seconds = timerValue % 60;
+                
+                const formattedTime = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                document.getElementById('clockPzn').textContent = formattedTime;
+            }
+        </script>
+        
+
+		<script>
+			const imgCounder = document.getElementById("imgCounder");
+			const data = "data"
+            var imgData = {};
+			const enteredName = document.getElementById("enteredName");
+			const dragDropArea = document.getElementById('drag-drop-area');
+			const photoList = document.getElementById('photo-list');
+
+			const imgList = document.getElementById("photo-list");
+			const removeCustomThing = document.getElementById("removeCustomThing");
+
+			const imageArrowLeft = document.getElementById("imageArrowLeft");
+			const imageArrowRight = document.getElementById("imageArrowRight");
+
+			var currentlyLoadedPzn = {data: [["firstName", []]]};
+			var imageIndex = 0;
+
+            function showPopup() {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('popup').style.top = '50%';
+            }
+
+            // Function to hide the popup
+            function hidePopup() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('popup').style.top = '150%';
+            }
+
+			function RemoveCustomThing() {
+				currentlyLoadedPzn[data].splice(imageIndex, 1);
+				imageIndex--;
+				loadCustomEditor(imageIndex);
+			}
+
+            var isEdit = false;
+
+            function updateListPzn(index) {
+                
+                var list = document.getElementById('learned');
+                list.innerHTML = ''; // Clear existing list items
+                
+                // Loop through the array and create list items
+                var listData = currentlyLoadedPzn[data];
+                listData.forEach(
+                    function(item, index) {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = item[0];
+                        
+                        // Add click event listener to each list item
+                        listItem.addEventListener('click', function() {
+                            // Retrieve the index of the clicked item
+                            var clickedIndex = index;
+                            console.log('Clicked index:', clickedIndex);
+
+                            currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
+
+                            imageIndex = clickedIndex;
+
+                            loadCustomEditor(imageIndex);
+                            // You can perform further actions with the clicked index here
+                        });
+                        
+                        list.appendChild(listItem); // Append the list item to the list
+                    }
+                );
+                
+            }
+
+            function editMode() {
+                if(isEdit){
+                    document.getElementById("editmode").innerHTML = "edit mode";
+                    document.getElementById("poznavackovatorField").style.display = "block";
+                    document.getElementById("editor").style.display = "none";
+
+                    isEdit = false;
+                }else{
+                    document.getElementById("editmode").innerHTML = "run mode";
+                    document.getElementById("poznavackovatorField").style.display = "none";
+                    document.getElementById("editor").style.display = "block";
+
+                    isEdit = true;
+                }
+                
+            }
+
+            function updateListLearned() {
+                
+                var list = document.getElementById('learned');
+                list.innerHTML = ''; // Clear existing list items
+                
+                // Loop through the array and create list items
+                pznLearned.forEach((arrayItem, index, fullArray) => {
+                    
+                        var listItem = document.createElement('li');
+                        listItem.textContent = pznLearnedNames[index];
+                        
+                        // Add click event listener to each list item
+                        listItem.addEventListener('click', function() {
+                            // Retrieve the index of the clicked item
+
+                            var clickedIndex = index;
+                            console.log('Clicked item and index:', pznLearnedNames[index], index);
+
+                            pznLearned.splice(index, 1);
+                            pznLearnedNames.splice(index, 1);
+
+                            updateListLearned()
+
+                        });
+                        
+                        list.appendChild(listItem); // Append the list item to the list
+                    }
+                );
+                
+            }
+
+			function loadCustomEditor(index){
+				wipePhotoList()
+
+                updateListPzn(index);
+				imgCounder.innerHTML = imageIndex+1+"/"+currentlyLoadedPzn[data].length;
+				console.log("loading " + index)
+				enteredName.value = currentlyLoadedPzn[data][index][0];
+
+				if(currentlyLoadedPzn[data][index][1].length == 0 && imageIndex != 0){
+					removeCustomThing.style.display = "block"
+				}else{
+					removeCustomThing.style.display = "none"
+				}
+
+				currentlyLoadedPzn[data][index][1].forEach(element => {
+					addPhotoToList(element);
+				});
+
+				if(imageIndex == 0){
+					imageArrowLeft.style.display = "none";
+				}else{
+					imageArrowLeft.style.display = "block";
+				}
+
+				if(imageIndex == currentlyLoadedPzn[data].length - 1){
+					imageArrowRight.innerHTML = "+";
+				}else{
+					imageArrowRight.innerHTML = ">";
+				}
+			}
+
+
+
+			function ImageLeft(){
+				if(imageIndex == 0) return;
+
+				currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
+
+				imageIndex--;
+
+				loadCustomEditor(imageIndex);
+
+				
+
+			}
+
+			function ImageRight(){
+				console.log(currentlyLoadedPzn[data].length + " " + imageIndex)
+				if(imageIndex == currentlyLoadedPzn[data].length - 1){currentlyLoadedPzn[data].push(["",[]])}
+
+				currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
+
+				imageIndex++;
+
+				loadCustomEditor(imageIndex);
+				
+
+			}
+
+			
+
+			
+
+			function wipePhotoList() {
+				// Remove all child elements from the photo list
+				while (photoList.firstChild) {
+					photoList.removeChild(photoList.firstChild);
+				}
+			}
+		</script>
+        <script>
+            var infoT = false;
+            var settingsT = false;
+            function info(){
+                div = document.getElementById("info");
+                div.style.transition = "height 0.3s, width 0.3s, left 0.3s";
+                
+
+                if(infoT){
+                    div.style.width = "100px";
+                    div.style.height = "50px";
+                    div.style.left = "-50px";
+                    infoT = false;
+                }else{
+                    div.style.width = "200px";
+                    div.style.height = "500px";
+                    div.style.left = "-150px";
+                    infoT = true;
+                }
+            }
+
+            function settings(){
+                //div = document.getElementById("settings");
+                //div.style.transition = "height 0.3s, width 0.3s, right 0.3s";
+
+                if(settingsT){
+                    //div.style.width = "100px";
+                    //div.style.height = "50px";
+                    //div.style.right = "-50px";
+                    hidePopup();
+                    settingsT = false;
+                }else{
+                    //div.style.width = "200px";
+                    //div.style.height = "500px";
+                    //div.style.right = "-150px";
+                    showPopup();
+                    settingsT = true;
+                }
+            }
+
+            function slideDropDown(){
+                let dropdown = document.getElementById("filePickWindowDropdown");
+                let container = document.getElementById("customContainer");
+                let main = document.getElementById("main");
+                main.style.transition = "top 0.3s"
+                container.style.transition = "height 0.3s";
+
+                if(dropdown.classList.contains('slidedDropDown')){
+                    dropdown.classList.remove('slidedDropDown');
+                    container.style.height = "55px";
+                    main.style.top = "350px";
+                }else{
+                    dropdown.classList.add('slidedDropDown');
+                    container.style.height = "140px";
+                    main.style.top = "430px";
+                }
+                
+            }
+
+            function slideDropDown2(){
+                let dropdown = document.getElementById("mainDropdown");
+                if(dropdown.classList.contains('slidedDropDownMain')){
+                    dropdown.classList.remove('slidedDropDownMain');
+                }else{
+                    dropdown.classList.add('slidedDropDownMain');
+                }
+                
+            }
+        </script>
+
+        <script> // I/O
+            const fileName = "data.json";
+
+            function downloadJSON(json, fileName){ //saves the json to users computer
+                var a = document.createElement('a');
+                a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+                a.download = fileName;
+                a.click();
+            }
+        
+            function inputFile() { //lets the user upload a file and returns parsed json
+                return new Promise((resolve, reject) => {
+                    var inputElement = document.createElement('input');
+                    inputElement.type = 'file';
+
+                    inputElement.addEventListener('change', function (e) {
+                        var file = e.target.files[0];
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var contents = e.target.result;
+                            var data = JSON.parse(contents);
+                            resolve(data);
+                        };
+
+                        reader.onerror = function (error) {
+                            reject(error);
+                        };
+
+                        reader.readAsText(file);
+                    });
+
+                    inputElement.click();
+                });
+            }
+        
+            function loadJSON(file) { //loads a json from file by its path and return the parsed json
+                return fetch(file)
+                    .then(response => response.json())
+                    .then(data => {
+                        return data;
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+
+            function exportJSON() {
+                var input = document.getElementById('input').value; //get the input
+
+                //construct the object
+                var data = {
+                    "input": input
+                };
+
+                var json = JSON.stringify(data, null, 2); //convert to JSON
+
+                downloadJSON(json, fileName);
+                
+            }
+
+            var pickedIndex = -1;
+            var displayedIndex = -1;
+            var pickedName = "";
+            var pickedImages = [];
+            var pznLearned = [];
+            var pznLearnedNames = [];
+            var displayingName = false;
+            function setupPzn(){
+                resetTimer();
+                startTimer();
+                pickRandom();
+            }
+
+            function pickRandom(){
+                const availableIndices = currentlyLoadedPzn[data]
+                    .map((_, index) => index)
+                    .filter(index => !pznLearned.includes(index));
+
+                pickedIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                pickedName = currentlyLoadedPzn[data][pickedIndex][0];
+                pickedImages = currentlyLoadedPzn[data][pickedIndex][1];
+                
+                //display
+                console.log("displaying");
+                displayedIndex = 0;
+                document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
+            }
+
+            function pznLearn(){
+                var name = currentlyLoadedPzn[data][pickedIndex][0];
+                if(pznLearned.includes(pickedIndex)) return;
+                pznLearned.push(pickedIndex);
+                pznLearnedNames.push(name);
+                updateListLearned();
+                document.getElementById("counterPzn").innerHTML = pznLearned.length;
+            }
+
+            function pznShow() {
+                if(displayingName){
+                    //hidename
+                    document.getElementById("showButton").innerHTML = "next random image"
+                    document.getElementById("imageNamePzn").innerHTML = "";
+                    pickRandom();
+                    displayingName = false;
+                }
+                else{
+                    document.getElementById("imageNamePzn").innerHTML = pickedName;
+                    //showname
+                    document.getElementById("showButton").innerHTML = "show name"
+                    displayingName = true;
+                }
+
+            }
+
+            function sameName(){
+                displayedIndex++;
+                displayedIndex = displayedIndex % pickedImages.length;
+                document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
+            }
+
+
+
+            async function importJSON() {
+                try {
+                    var data = await inputFile();
+                    currentlyLoadedPzn = data;
+                    setupPzn()
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+
+            async function loadDefaultJSON() {
+                try {
+                    var data = await loadJSON('default.json');
+                    var input = data.input;
+                    document.getElementById('input').value = input;
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+ 
+        </script>
+    
+        <script> // toggleSwich
+            document.getElementById("toggleType").addEventListener("change", function() {
+            // Toggle the switch's state
+            if (this.checked) {
+                // Switch is ON
+                // Perform actions when switch is on
+            } else {
+                // Switch is OFF
+                // Perform actions when switch is off
+            }
+            });
+
+        </script>
+
+		<script>
+			
+
+			dragDropArea.addEventListener('dragover', (e) => {
+				e.preventDefault();
+				dragDropArea.classList.add('drag-over');
+			});
+
+			dragDropArea.addEventListener('dragleave', () => {
+				dragDropArea.classList.remove('drag-over');
+			});
+
+			dragDropArea.addEventListener('drop', (e) => {
+				e.preventDefault();
+				dragDropArea.classList.remove('drag-over');
+
+				const link = e.dataTransfer.getData('text/plain');
+				console.log(link);
+
+				// Check if the dropped link corresponds to a photo
+				if (isPhotoLink(link)) {
+					// Add the photo to the list
+                    currentlyLoadedPzn.data[imageIndex][1].push(link);
+                    
+                    
+					loadCustomEditor(imageIndex);
+
+				}
+			});
+
+			function isPhotoLink(link) {
+				// Your logic to determine if the link corresponds to a photo
+				// For simplicity, this example assumes that any link ending with ".jpg" or ".png" is a photo
+				return true;
+				return link.toLowerCase().endsWith('.jpg') || link.toLowerCase().endsWith('.png');
+			}
+
+			function addPhotoToList(link) {
+				// Create an image element
+				const image = document.createElement('img');
+				image.src = link;
+				image.alt = 'Dropped Photo';
+
+				// Create a list item for the photo
+				const listItem = document.createElement('li');
+				listItem.appendChild(image);
+
+				// Add a click event listener to remove the photo when clicked
+				listItem.addEventListener('click', () => {
+					removePhotoFromList(listItem);
+				});
+
+				// Add the list item to the photo list
+				photoList.appendChild(listItem);
+			}
+
+			function removePhotoFromList(listItem) {
+				// Remove the clicked photo from the list
+
+				console.log(listItem.firstChild);
+				var index = currentlyLoadedPzn[data][imageIndex][1].indexOf(listItem.firstChild.src);
+
+				
+				if (index !== -1) {
+					// Use splice to remove the first instance of the element
+					currentlyLoadedPzn[data][imageIndex][1].splice(index, 1);
+				}
+
+				loadCustomEditor(imageIndex);
+				
+			}
+
+
+		</script>
+
+    </body>
 </html>
