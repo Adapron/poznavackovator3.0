@@ -386,11 +386,11 @@
         <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
             <br style = "height:20px;">
             <select class="ui" style="width: 100%; height: 50px;" >
-                <option class="ui" >1</option>
-                <option class="ui" >2</option>
-                <option class="ui" >3</option>
-                <option class="ui" >4</option>
-                <option class="ui" >5</option>
+                <option class="ui" onclick="loadJSON(`./poz/kosti_converted.json`)">kosti</option>
+                <option class="ui" onclick="loadJSON(`./poz/slvaly_a_kosti.json`)">kosti a svaly</option>
+                <option class="ui" onclick="loadJSON(`./poz/prvni_papir_a_druhy_papir.json`)">soustavy 1</option>
+                <option class="ui" onclick="loadJSON(`./poz/kasas.json`)">kosti a svaly a soustavy 1</option>
+
             </select>
 
 
@@ -859,7 +859,9 @@
                 return fetch(file)
                     .then(response => response.json())
                     .then(data => {
-                        return data;
+                        currentlyLoadedPzn = data;
+                        setupPzn()
+                        loadCustomEditor(0)
                     }).catch(error => {
                         console.error('Error:', error);
                     });
@@ -1039,7 +1041,6 @@
 			function removePhotoFromList(listItem) {
 				// Remove the clicked photo from the list
 
-				console.log(listItem.firstChild);
 				var index = currentlyLoadedPzn[data][imageIndex][1].indexOf(listItem.firstChild.src);
 
 				
