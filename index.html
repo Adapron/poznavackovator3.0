@@ -230,7 +230,7 @@
 
             .imageDiv {
                 width: 100%;
-                height: 300px;
+                height: 30vh;
                 position: relative;
                 top: 30px;
 				overflow: hidden;
@@ -289,8 +289,8 @@
 					display: flex;
 				}
 				#photo-list img {
-					width: 100px;
-					height: 100px;
+					width: 100%;
+					height: 100%;
                     padding-top: 10px;
 					margin-right: 10px;
 					cursor: pointer;
@@ -319,7 +319,7 @@
 
             .field {
                 height: 50px;
-                width: 290px;
+                width: 90%;
                 margin: 0;
                 padding: 0;
                 display: flex;
@@ -338,7 +338,7 @@
                 position: absolute;
                 top: 10px;
                 left: -50px;
-                width: 100px;
+                width: 100%;
                 display: flex;
                 height: 50px;
                 justify-content: center;
@@ -351,7 +351,7 @@
                 position: absolute;
                 top: 10px;
                 right: -50px;
-                width: 100px;
+                width: 100%;
                 display: flex;
                 height: 50px;
                 justify-content: center;
@@ -383,7 +383,7 @@
 
         <br style = "height:20px;">
 
-        <div id = "filePickWindow" class = "section" style="width: 600px; height: 130px; position: absolute; top: 160px">
+        <div id = "filePickWindow" class = "section" style="max-width: 600px; width: 80%; height: 130px; position: absolute; top: 160px">
             <br style = "height:20px;">
             <select id = "myDropdown" class="ui" style="width: 100%; height: 50px;" >
                 <option class="ui" onclick="loadJSON(`./poz/kosti_converted.json`)">kosti</option>
@@ -407,7 +407,7 @@
         </div>
 
         
-        <div id = "filePickWindowDropdown" class = "customDropDown" style="width: 600px; height: 140px; position: absolute; ">
+        <div id = "filePickWindowDropdown" class = "customDropDown" style="max-width: 600px; width:80%; height: 140px; position: absolute; ">
             <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button>
             <button  class="ui boing" style="width: 30%;" onclick="importJSON()">load from file</button>
             <button  class="ui boing" style="width: 30%;" onclick="savejson()">save to file</button>
@@ -415,10 +415,10 @@
         
         </div>
         
-        <div id = "customContainer" style="width: 600px; height: 55px; ">
+        <div id = "customContainer" style="max-width: 600px; width:80%; height: 55px; ">
         </div>
 
-        <div id = "main" class = "section" style="width: 600px; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
+        <div id = "main" class = "section" style="max-width: 600px; width:80%; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
 
 
 
@@ -429,7 +429,7 @@
                 <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
             </div>
 
-            <div id = "editor" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
+            <div id = "editor" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
             
 
                 <div id = "imageDiv" class = "imageDiv ui ">
@@ -462,7 +462,7 @@
 
             </div>
 
-            <div id = "poznavackovatorField" class = "section" style="width: 600px; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
+            <div id = "poznavackovatorField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
             
 
                 <img id = "imageDivPzn" class = "ui imageDiv" onclick="sameName()">
@@ -490,7 +490,7 @@
             </div>
 
 
-            <div id = "mainDropdown" class = "customDropDown" style="width: 600px; height: 400px; position: absolute; top: 315px;">
+            <div id = "mainDropdown" class = "customDropDown" style="max-width: 600px; width:100%; height: 400px; position: absolute; top: 315px;">
                 <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
                 
                     
@@ -509,7 +509,7 @@
 
 
     <div id="overlay" onclick="settings()" style="filter: none;"></div>
-    <div id="popup" class="ui" style="background-color: white; width: 600px; height: 300px;filter: none;">
+    <div id="popup" class="ui" style="background-color: white; max-width: 600px; width:80%; height: 300px;filter: none;">
         <!-- Popup content goes here -->
     </div>
     
@@ -772,7 +772,7 @@
                 
 
                 if(infoT){
-                    div.style.width = "100px";
+                    div.style.width = "100%";
                     div.style.height = "50px";
                     div.style.left = "-50px";
                     infoT = false;
@@ -789,7 +789,7 @@
                 //div.style.transition = "height 0.3s, width 0.3s, right 0.3s";
 
                 if(settingsT){
-                    //div.style.width = "100px";
+                    //div.style.width = "100%";
                     //div.style.height = "50px";
                     //div.style.right = "-50px";
                     hidePopup();
