@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Canvas Circle Drawing</title>
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+        <script src="script.js"></script>
+    </body>
+
+    <script>//rendering
+
+        var sizeMultiplier = 0.8;
+
+        let nodes = [];
+        let lines = [];
+        var canvas    = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        const offscreenCanvas = document.createElement("canvas"); // Create offscreen canvas
+        offscreenCanvas.width = 500;
+        offscreenCanvas.height = 500;
+        const offscreenCtx = offscreenCanvas.getContext("2d");
+
+        var highlightedNodeId = null;
+
+        // Function to draw a node
+        function drawNode(node, context, isSelected) {
+
+            let text = node.type;
+
+            let isNodeConnected = getAnyLineOfANode(node.id) != null;
+
+            if(node.id != selectedNodeId && text.length == 0){
+                removeNodeAndConnections(node.id); 
+                return;
+            }
+
+            if(node.type == "C" && isNodeConnected && node.id != selectedNodeId && node.id != highlightedNodeId){return;}
+
+
+            context.beginPath();
+            context.arc(node.x , node.y, node.radius, 0, 2 * Math.PI);
+            if (node.id === selectedNodeId) {
+                context.strokeStyle = "black"; // Outline color
+                context.lineWidth = 2; // Outline width
+                context.stroke();
+            }
+            else if (node.id === highlightedNodeId) {
+                context.strokeStyle = "red"; // Outline color
+                context.lineWidth = 2; // Outline width
+                context.stroke();
+            }
+            
+            context.fillStyle = "white"; // Fill color
+            context.fill();
+
+            context.textAlign = "left";
+            context.textBaseline = "middle";
+            context.fillStyle = "black";
+            // Start with a large font size
+            var fontSize = 40;
+
+            do {
+                // Set font properties
+                context.font = fontSize + "px Arial";
+                
+                // Measure text width
+                var textWidth = ctx.measureText(text.charAt(0)).width;
+                
+                // Decrease font size if text width is greater than circle diameter
+                if (textWidth > node.radius * 2) {
+                    node.radius--;
+                }
+            } while (textWidth > node.radius * 2 - 5*sizeMultiplier && fontSize > 0);
+
+            
+
+
+
+            context.font = fontSize*sizeMultiplier+"px Arial"
+
+            context.fillText(node.type, node.x- ctx.measureText(text.charAt(0)).width*1.6, node.y);
+
+            
+
+            //const img = new Image();
+            //img.src = getNodeSpriteUrl(node.type);
+            //img.onload = function() {
+            //    context.drawImage(img, node.x - node.radius, node.y - node.radius, node.radius * 2, node.radius * 2);
+            //    if (node.id === selectedNodeId) {
+            //        // Draw border or change color to indicate selection
+            //        context.strokeStyle = "blue"; // Change to desired color
+            //        context.lineWidth = 2; // Change to desired border width
+            //        context.strokeRect(node.x - node.radius - 1, node.y - node.radius - 1, node.radius * 2 + 2, node.radius * 2 + 2);
+            //    }
+            //};
+        }
+
+        const connectionWidth = 2;
+
+        // Function to draw a line
+        function drawLine(line, context, count, isBlack) {
+            const startNode = nodes.find(element => element.id === line.startNodeId);
+            const endNode = nodes.find(element => element.id === line.endNodeId);
+            context.strokeStyle = isBlack ? "white":"black"; // Change to desired color
+            context.beginPath();
+            context.moveTo(startNode.x, startNode.y);
+            context.lineTo(endNode.x, endNode.y);
+            context.lineWidth = connectionWidth * count;
+            context.stroke();
+            if(count > 1) drawLine(line, context, count-2, !isBlack);
+        }
+
+        function drawLineToMouse(startNodeId, mousePosX, mousePosY, context) {
+            const startNode = nodes.find(element => element.id === startNodeId);
+            context.strokeStyle = "black"; // Change to desired color
+            context.beginPath();
+            context.moveTo(startNode.x, startNode.y);
+            context.lineTo(mousePosX, mousePosY);
+            context.lineWidth = connectionWidth * 1;
+
+            context.stroke();
+        }
+
+        // Function to get node sprite URL based on type
+        function getNodeSpriteUrl(type) {
+            return type + ".png";
+        }
+
+
+        function redrawCanvas() {
+            // Clear offscreen canvas
+            offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+            lines.forEach(element => {drawLine(element, offscreenCtx, (element.count * 2 - 1), !element.count%2);});
+
+            if(clickedNode != null && currentMouseX != null && isMouseDown){
+                drawLineToMouse(clickedNode.id, currentMouseX, currentMouseY, offscreenCtx);
+            }
+
+            // Draw elements on offscreen canvas
+            nodes.forEach(element => {drawNode(element, offscreenCtx);});
+
+            
+            //if(mouseDown){
+            //    const startNode = clickedNode;
+            //    offscreenCtx.strokeStyle = "black"; // Change to desired color
+            //    offscreenCtx.beginPath();
+            //    offscreenCtx.moveTo(startNode.x, startNode.y);
+            //    offscreenCtx.lineTo(currentMousePos.x, currentMousePos.y);
+            //    offscreenCtx.lineWidth = connectionWidth * 1;
+            //    offscreenCtx.stroke();
+            //}
+            
+                
+
+            // Copy offscreen canvas to the visible canvas
+            setTimeout(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.drawImage(offscreenCanvas, 0, 0);
+                
+            }, 10);
+        }
+
+        var currentID = 0;
+
+        function newId(){
+            currentID++;
+            return currentID;
+        }
+
+    </script>
+
+    <script>
+
+        function distanceSquared(x1, y1, x2, y2) {
+            return (Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        }
+
+        function getNodeAtPos(x,y){
+
+            var clickedNode = null;
+            nodes.forEach(node => {
+                    let dist = distanceSquared(node.x, node.y, x, y)
+                    if(dist < node.radius**2){
+
+                        clickedNode = node;
+                    }
+            });
+            return clickedNode;
+        }
+
+        function connectNodes(id1, id2){
+            lines.push({
+                id: newId(),
+                shape: "line",
+                startNodeId: id1,
+                endNodeId: id2,
+                count: 1
+            });
+        }
+
+
+        function newNode(x,y,connectTo) {
+
+            let newNodeId = newId();
+
+            nodes.push({
+                id: newNodeId,
+                shape: "node",
+                type: "C", // Set the type of node as needed
+                radius: 20 * sizeMultiplier, // Set the radius as needed
+                x: x,
+                y: y,
+                vx: 0,
+                vy: 0,
+                mass: 1
+            })
+            
+            if(connectTo){
+                connectNodes(connectTo, newNodeId);
+            }
+            
+            selectedNodeEdited = false;
+
+            return newNodeId;
+
+        }
+
+        function connectionExists(startNodeId, endNodeId) {
+            return lines.find(line => {
+                return (line.startNodeId === startNodeId && line.endNodeId === endNodeId) || (line.startNodeId === endNodeId && line.endNodeId === startNodeId);
+            });
+        }
+
+        function getAnyLineOfANode(nodeId) {
+            return lines.find(line => {
+                return line.startNodeId == nodeId || line.endNodeId === nodeId;
+            });
+        }
+
+        function getNodeById(nodeId) {
+            return nodes.find(node => node.id === nodeId);
+        }
+
+        function removeNodeAndConnections(nodeId){
+        
+
+            nodes = nodes.filter(node=>{
+                return node.id !== nodeId;
+            })
+
+            lines = lines.filter(line=>{
+                return line.startNodeId !== nodeId && line.endNodeId !== nodeId;
+            })
+        }
+
+        function removeConnection(connectionId){
+            lines = lines.filter(line=>{
+                return line.id != connectionId;
+            })
+        }
+
+        const subscriptMap = {
+            '0': '₀',
+            '1': '₁',
+            '2': '₂',
+            '3': '₃',
+            '4': '₄',
+            '5': '₅',
+            '6': '₆',
+            '7': '₇',
+            '8': '₈',
+            '9': '₉'
+        };
+
+        var selectedNodeEdited = false;
+
+        var selectedNodeId = null; // Store the ID of the last added node
+
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+
+            let selectedNode = getNodeById(selectedNodeId);
+            // Check if specific keys are pressed
+
+            if(!selectedNodeEdited){
+                selectedNode.type = "";
+                selectedNodeEdited = true;
+            }
+
+
+            if(key == "Delete") {
+                removeNodeAndConnections(selectedNode.id);
+                return;
+            }
+            
+            if(key.length == 1 && /[a-zA-Z]/.test(key)) selectedNode.type = selectedNode.type + key.toUpperCase();
+
+            if (/^\d$/.test(event.key)) selectedNode.type = selectedNode.type + subscriptMap[key];
+
+            if(key == "Backspace") selectedNode.type = selectedNode.type.slice(0, -1);
+
+            
+        
+        });
+
+        function deselect(){
+            selectedNodeId = null; //deselect
+            selectedNodeEdited = false;
+        }
+
+        function select(node){
+            selectedNodeId = node.id;
+            selectedNodeEdited = false;
+        }
+        var mouseTimer = 0;
+
+        setInterval(() => {
+            mouseTimer += 0.1;
+            
+        }, 100);
+
+        var currentMouseX = null;
+        var currentMouseY = null;
+        var clickedNode = null;
+        var isMouseDown = false;
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            canvas.addEventListener("contextmenu", function(event) {
+                event.preventDefault(); // Prevent default context menu
+            });
+            
+            //canvas.addEventListener("contextmenu", function(event) {
+            //    event.preventDefault(); // Prevent default context menu
+            //});
+            // Function to handle click event
+
+            
+            
+
+            var clickedPos = null;
+
+
+
+            
+
+            canvas.addEventListener("mousemove", function(event){
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                var overNode = getNodeAtPos(x,y);
+
+                if(overNode != null) {
+                    highlightedNodeId = overNode.id
+                }
+                else{
+                    highlightedNodeId = null;
+                }
+
+
+
+                currentMouseX = x;
+                currentMouseY = y;
+            })
+
+            
+
+            canvas.addEventListener("mouseup", function(event) {
+                isMouseDown = false;
+
+                let button = event.button;
+
+
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                var releasedNode = getNodeAtPos(x,y);
+
+                if(button == 2) {
+
+                    deselect();
+
+                    event.preventDefault();
+
+                }
+
+                if(button == 1) {
+
+                    if(releasedNode){
+                        removeNodeAndConnections(releasedNode.id);
+                        deselect();
+                    }
+
+                    event.preventDefault();
+
+                }
+
+
+                if(button == 0) {
+
+                    const tapped = mouseTimer < 0.2;
+
+
+                    if(tapped && releasedNode == null){  //tapped in air
+                        if(selectedNodeId != null){
+                            deselect()
+
+                        }else{
+                            selectedNodeId = newNode(x,y,null);
+                        }
+                    }
+
+                    if(tapped && releasedNode != null){ //tapped on a node
+                        select(releasedNode);
+                    }
+
+                    if(!tapped && releasedNode == null){ //dragged into air
+                        if(clickedNode != null) {
+                            selectedNodeId = newNode(x,y,clickedNode.id); //make a new node connected to the selected
+                        }else{
+                            return;
+                            //let initialNodeId = newNode(clickedPos.x,clickedPos.y,null); //make a new node 
+                            //let secondNodeId = newNode(x,y,null);
+                            //selectedNodeId = secondNodeId; //make a new node 
+                            //connectNodes(initialNodeId,secondNodeId);
+                        }
+                    }
+
+                    if(!tapped && releasedNode != null){ //dragged onto a node
+                        if(clickedNode.id == releasedNode.id) return;
+                        let connection = connectionExists(clickedNode.id, releasedNode.id);
+                        if(connection != null){
+                            if (connection.count === 3) {
+                                removeConnection(connection.id); 
+                            } else {
+                                connection.count++;
+                            }
+                        }else{ //connection does not exist
+                            connectNodes(clickedNode.id, releasedNode.id);
+                            select(releasedNode);
+                        }
+                    }
+
+                    
+
+                    
+                }
+
+                clickedPos = null;
+
+            })
+
+            
+
+            canvas.addEventListener("mousedown", function(event) {
+
+                isMouseDown = true;
+                mouseTimer = 0;
+
+
+
+
+                let button = event.button;
+
+
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                clickedPos = (x,y);
+
+                let connected = false;
+
+                clickedNode = getNodeAtPos(x,y);
+
+
+                
+
+                
+
+                redrawCanvas();
+                
+            });
+        });
+
+
+
+    </script>
+
+    <script>//sim
+    
+            // Constants
+        const springConstant = 0.1;
+        const dampingFactor = 0.05;
+        const repulsionConstant = 100;
+
+        // Initialize nodes and lines (assuming you have them stored in 'nodes' and 'lines' arrays)
+
+        // Example arrays
+        
+
+        
+
+        
+
+        // Function to calculate distance between two points
+        function distance(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        }
+
+        // Function to calculate spring force between two nodes
+        function springForce(node1, node2) {
+            const distanceBetweenNodes = distance(node1.x, node1.y, node2.x, node2.y);
+            const displacement = distanceBetweenNodes - 100*sizeMultiplier; // You need to define this value
+            const forceMagnitude = springConstant * displacement;
+            const dx = (node2.x - node1.x) / distanceBetweenNodes;
+            const dy = (node2.y - node1.y) / distanceBetweenNodes;
+            return { fx: forceMagnitude * dx, fy: forceMagnitude * dy };
+        }
+
+        //
+        function repulsionForce(node, otherNode) {
+            const dx = otherNode.x - node.x;
+            const dy = otherNode.y - node.y;
+            const distanceSquared = dx * dx + dy * dy;
+            const distance = Math.sqrt(distanceSquared);
+
+            // Calculate force magnitude (inverse relationship with distance)
+            const forceMagnitude = (-1 / distanceSquared) * repulsionConstant;
+
+            // Calculate force components
+            const fx = forceMagnitude * (dx / distance);
+            const fy = forceMagnitude * (dy / distance);
+
+            return { fx, fy };
+        }
+
+       
+
+        // Function to update positions and velocities of nodes
+        function updateNodes() {
+
+            if (nodes.length == 0) return;
+
+            let sumx = 0;
+            let sumy = 0;
+            nodes.forEach(node => {
+                sumx += node.x - 250;
+                sumy += node.y - 250;
+            })
+
+            sumx = (sumx / nodes.length) * -0.01;
+            sumy = (sumy / nodes.length) * -0.01;
+
+            nodes.forEach(node => {
+                let totalForceX = 0;
+                let totalForceY = 0;
+                
+                // Calculate spring forces from connected nodes
+                lines.forEach(line => {
+                    if (line.startNodeId === node.id) {
+                        const connectedNode = nodes.find(n => n.id === line.endNodeId);
+                        const { fx, fy } = springForce(node, connectedNode);
+                        totalForceX += fx;
+                        totalForceY += fy;
+                    } else if (line.endNodeId === node.id) {
+                        const connectedNode = nodes.find(n => n.id === line.startNodeId);
+                        const { fx, fy } = springForce(node, connectedNode);
+                        totalForceX += fx;
+                        totalForceY += fy;
+                    }
+                });
+                
+                // Calculate repulsion forces between all nodes
+                nodes.forEach(otherNode => {
+                    if (node.id !== otherNode.id) {
+                        const { fx, fy } = repulsionForce(node, otherNode);
+                        totalForceX += fx;
+                        totalForceY += fy;
+                    }
+                });
+
+                // Apply damping
+                totalForceX -= dampingFactor * node.vx;
+                totalForceY -= dampingFactor * node.vy;
+
+
+                node.vx = 0;
+                node.vy = 0;
+
+                // Update velocity
+                node.vx += totalForceX + sumx;
+                node.vy += totalForceY + sumy;
+
+                // Update position
+                node.x += node.vx;
+                node.y += node.vy;
+
+            });
+        }
+
+        setInterval(() => {
+             // Update positions of nodes
+             updateNodes();
+
+            // Render nodes and lines (not implemented here)
+            redrawCanvas();
+
+            
+
+        }, 100);
+
+        
+
+    </script>
+</html>

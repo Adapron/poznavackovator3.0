@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsplash Image Search Example</title>
+<style>
+  /* CSS for image display */
+  #image {
+    max-width: 100%;
+    max-height: 100%;
+  }
+</style>
+</head>
+<body>
+<h1>Unsplash Image Search Example</h1>
+<form id="searchForm">
+  <label for="searchTerm">Search Term:</label>
+  <input type="text" id="searchTerm" name="searchTerm" required>
+  <button type="submit">Search</button>
+</form>
+<div id="imageContainer">
+  <img id="image" src="" alt="Searched Image">
+</div>
+
+<script>
+
+    // Function to fetch images from Wikipedia
+function fetchImagesFromWikipedia(searchTerm) {
+  // API endpoint for Wikipedia
+  const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=images&titles=${encodeURIComponent(searchTerm)}`;
+
+  // Fetch data from the Wikipedia API
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch data from Wikipedia.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Extract image information from the API response
+      const pages = data.query.pages;
+      const pageId = Object.keys(pages)[0];
+      const images = pages[pageId].images;
+
+      // Display the first image found (if any)
+      if (images && images.length > 0) {
+        const firstImageTitle = images[0].title;
+        // Construct the URL for the image
+        const imageUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&titles=File:${encodeURIComponent(firstImageTitle)}&prop=imageinfo&iiprop=url`;
+
+        // Fetch image URL
+        fetch(imageUrl)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to fetch image URL from Wikipedia.');
+            }
+            return response.json();
+          })
+          .then(imageData => {
+            const pages = imageData.query.pages;
+            const imageInfo = Object.values(pages)[0].imageinfo;
+            const imageUrl = imageInfo[0].url;
+
+            // Display the image
+            displayImage(imageUrl);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      } else {
+        console.log('No images found for the search term.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+// Function to display the image on the webpage
+function displayImage(imageUrl) {
+  const imageElement = document.getElementById('image');
+  imageElement.src = imageUrl;
+}
+
+// Example usage: Fetch images for a given Wikipedia article
+
+
+
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const searchTerm = document.getElementById('searchTerm').value.trim();
+  if (searchTerm !== '') {
+    fetchImagesFromWikipedia('Elephant');
+
+  } else {
+    alert('Please enter a search term.');
+  }
+});
+
+function fetchImage(searchTerm) {
+  const apiKey = 'N0DRgUIiFIlw_Lb9h5NhH3NU3WA-_NTRCKfh5ytr21s';
+  const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchTerm)}&per_page=1&client_id=${apiKey}`;
+  fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch image.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data && data.results && data.results.length > 0) {
+      const imageUrl = data.results[0].urls.regular;
+      displayImage(imageUrl);
+    } else {
+      alert('No images found for the search term.');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Failed to fetch image. Please try again later.');
+  });
+}
+
+function displayImage(imageUrl) {
+  const imageElement = document.getElementById('image');
+  imageElement.src = imageUrl;
+}
+</script>
+</body>
+</html>
