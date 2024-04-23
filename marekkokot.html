@@ -51,37 +51,86 @@
         // Initialize the map
         let map;
 
+        // Function to set a cookie with a given name, value, and expiration date
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+
+        // Function to get a cookie value by name
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var cookies = document.cookie.split(';');
+            for(var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                while (cookie.charAt(0) == ' ') {
+                    cookie = cookie.substring(1, cookie.length);
+                }
+                if (cookie.indexOf(nameEQ) == 0) {
+                    return cookie.substring(nameEQ.length, cookie.length);
+                }
+            }
+            return null;
+        }
+
+        // Function to delete a cookie by name
+        function eraseCookie(name) {   
+            document.cookie = name + '=; Max-Age=-99999999;';  
+        }
+
+        
+
         function save(array) {
             // Convert the array to a JSON string
             const jsonString = JSON.stringify(array);
             // Set the JSON string as a cookie
-            document.cookie = `array=${jsonString};`;
+            setCookie("data", jsonString, "20");
         }
 
         // Function to load the array from cookies
         function load() {
             // Get the cookie string
-            const cookieString = document.cookie;
-            // Split the cookie string by semicolons to get individual cookies
-            const cookies = cookieString.split(';');
-            // Initialize an empty array to store the loaded array
-            let loadedArray = [];
+            const cookieString = getCookie("data");
+            if(cookieString == null) return;
 
-            // Loop through each cookie
-            cookies.forEach(cookie => {
-                // Trim any leading or trailing whitespace from the cookie
-                const trimmedCookie = cookie.trim();
-                // Check if the cookie starts with 'array='
-                if (trimmedCookie.startsWith('array=')) {
-                    // Extract the JSON string from the cookie (remove 'array=')
-                    const jsonString = trimmedCookie.substring(6);
-                    // Parse the JSON string to convert it back to an array
-                    loadedArray = JSON.parse(jsonString);
-                }
-            });
+            loadedArray = JSON.parse(cookieString);
 
             // Return the loaded array
             return loadedArray;
+        }
+
+        function downloadString(string, fileName) {
+            var a = document.createElement('a');
+            var mimeType = 'application/gpx+xml'; // MIME type for GPX files
+            
+            a.href = `data:${mimeType};charset=utf-8,` + encodeURIComponent(string);
+            a.download = fileName;
+            a.click();
+        }
+
+
+        function downloadGPX(coordArray){
+            var finalString = `<?xml version="1.0" encoding="UTF-8"?><gpx version="1.0">`
+            coordArray.forEach(element => {
+                var toadd = `
+  <wpt lat="${element.lat}" lon="${element.long}">
+      <name>${element.name}</name>
+      <desc>marek je kokot</desc>
+  </wpt>`
+
+                finalString = finalString + toadd;
+            });
+
+            var endString = `</gpx>`
+
+            finalString = finalString + endString;
+
+            downloadString(finalString, "marekjekokot.gpx");
         }
 
         function initMap() {
@@ -124,11 +173,15 @@
         var markers = [];
         var coordsMarkers = [];
 
+        var debug = false;
+        let loaded = load();
+        if(loaded != null){
+            coordsMarkers = loaded;
 
-        coordsMarkers = load();
-        if(coordsMarkers && coordsMarkers.length > 0 && coordsMarkers[0][0]){
+        }
+        if(coordsMarkers && coordsMarkers.length > 0){
             coordsMarkers.forEach(element => {
-            let newmarker = L.marker([element[0], element[1]]).addTo(map)
+            let newmarker = L.marker([element.lat, element.long]).addTo(map)
             markers.push(newmarker);
         });
         }
@@ -143,7 +196,12 @@
                     
                     // Add a pin marker at the current location
                     let newmarker = L.marker([latitude, longitude]).addTo(map)
-                    coordsMarkers.push((latitude, longitude));
+                    
+                    coordsMarkers.push({
+                        lat: latitude,
+                        long: longitude,
+                        name: "s"
+                    });
                     markers.push(newmarker);
                     save(coordsMarkers);
 
@@ -166,11 +224,19 @@
         });
 
         document.getElementById('wipe').addEventListener('click', function() {
-            alert("wipúing")
+            alert("downloading and wiping")
+            downloadGPX(coordsMarkers);
+            do{
+                let lastElement = markers.pop();
+                coordsMarkers.pop()
+                lastElement.remove();
+            }while(markers.length > 0)
+            
             wipeCookies();
         });
 
         setInterval(() => {
+            if(debug) return;
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = position.coords
