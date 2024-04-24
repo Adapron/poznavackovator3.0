@@ -29,7 +29,7 @@ function isPhotoLink(link) {
     // Your logic to determine if the link corresponds to a photo
     // For simplicity, this example assumes that any link ending with ".jpg" or ".png" is a photo
     return true;
-    return link.toLowerCase().endsWith('.jpg') || link.toLowerCase().endsWith('.png');
+    //return link.toLowerCase().endsWith('.jpg') || link.toLowerCase().endsWith('.png');
 }
 
 function addPhotoToList(link) {
