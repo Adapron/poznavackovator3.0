@@ -1,0 +1,718 @@
+[
+  {
+    "type": "C",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "O",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 2,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "C",
+    "connections": [
+      {
+        "count": 2,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "H",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "N",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "H",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "C",
+    "connections": [
+      {
+        "count": 2,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "H",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "N",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 2,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "N",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 2,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH₂",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "C",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "NH",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "NH₂",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 2,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "NH",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "O",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH₂",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "C",
+    "connections": [
+      {
+        "count": 2,
+        "node": {
+          "type": "O",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "NH",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "NH₂",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH₂",
+                "connections": []
+              }
+            },
+            {
+              "count": 2,
+              "node": {
+                "type": "N",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "O",
+    "connections": [
+      {
+        "count": 2,
+        "node": {
+          "type": "C",
+          "connections": [
+            {
+              "count": 2,
+              "node": {
+                "type": "O",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "NH",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "H",
+    "connections": [
+      {
+        "count": 1,
+        "node": {
+          "type": "N",
+          "connections": [
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "C",
+                "connections": []
+              }
+            },
+            {
+              "count": 1,
+              "node": {
+                "type": "H",
+                "connections": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
