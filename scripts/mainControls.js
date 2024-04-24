@@ -132,6 +132,8 @@ function setupPzn(){
     pickRandom();
     updateListLearned(0);
 }
+
+var shownImages = 0;
 function pickRandom(){
     const availableIndices = currentlyLoadedPzn[data]
         .map((_, index) => index)
@@ -142,6 +144,8 @@ function pickRandom(){
     
     //display
     console.log("displaying");
+    document.getElementById("counterPzn").innerHTML = pznLearned.length + "    " + shownImages;
+    shownImages++;
     displayedIndex = 0;
     document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
 }
@@ -151,7 +155,7 @@ function pznLearn(){
     pznLearned.push(pickedIndex);
     pznLearnedNames.push(name);
     updateListLearned();
-    document.getElementById("counterPzn").innerHTML = pznLearned.length;
+    document.getElementById("counterPzn").innerHTML = pznLearned.length + "    " + shownImages;
 }
 function pznShow() {
     if(displayingName){
