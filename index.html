@@ -448,6 +448,7 @@
 
                 <div id = "underImage" class = "under" >
                     <a id="imgCounder" class = "ui field clockFont">1/1</a>
+                    <button class = "ui field" onclick="searchGoogle()">automatic fill</button>
 
                 </div>
 
@@ -531,6 +532,52 @@
 
                 document.body.removeChild(link);
             }
+
+            function searchGoogle() {
+                const searchTerm = document.getElementById('enteredName').value.trim();
+                if (searchTerm === '') {
+                    alert('Please enter a search term');
+                    return;
+                }
+
+                const corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
+                const googleImagesUrl = `https://commons.wikimedia.org/w/index.php?search=${encodeURIComponent(searchTerm)}&title=Special:MediaSearch&go=Go&type=image&uselang=cs`;
+                console.log("fetch started")
+
+                fetch(corsAnywhereUrl + googleImagesUrl)
+                    .then(response => response.text())
+                    .then(fetchedHtml => {
+                        console.log("page loaded")
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(fetchedHtml, 'text/html');
+                    const imageElements = doc.querySelectorAll('img');
+
+                    console.log(doc);
+
+                    const imageLinks = [];
+                    var found = 0;
+                    imageElements.forEach(img => {
+                        const src = img.getAttribute('src');
+                        console.log(src);
+                        if (src && src.startsWith('http')) {
+                            found++;
+                            if(found>10)return
+                            currentlyLoadedPzn.data[imageIndex][1].push(src);
+                    
+                    
+					        loadCustomEditor(imageIndex);
+                        }
+                    });
+
+                    })
+                    .catch(error => {
+                    console.error('Error fetching images:', error);
+                    alert('An error occurred while fetching images');
+                    });
+                }
+
+                
+
         </script>
 
         <script>
@@ -738,6 +785,10 @@
 				
 
 			}
+
+            enteredName.addEventListener("change", function(event){
+                currentlyLoadedPzn[data][imageIndex][0] = enteredName.value;
+            })
 
 			function ImageRight(){
 				console.log(currentlyLoadedPzn[data].length + " " + imageIndex)
