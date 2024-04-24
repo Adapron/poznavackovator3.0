@@ -59,6 +59,7 @@ function editMode() {
         document.getElementById("poznavackovatorField").style.display = "none";
         document.getElementById("editor").style.display = "block";
         isEdit = true;
+        loadCustomEditor(0);
     }
     
 }
@@ -129,6 +130,7 @@ function setupPzn(){
     resetTimer();
     startTimer();
     pickRandom();
+    updateListLearned(0);
 }
 function pickRandom(){
     const availableIndices = currentlyLoadedPzn[data]
