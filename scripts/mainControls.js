@@ -50,12 +50,12 @@ function updateListPzn(index) {
 
 function editMode() {
     if(isEdit){
-        document.getElementById("editmode").innerHTML = "edit mode";
+        document.getElementById("editmode").innerHTML = "upravit";
         document.getElementById("poznavackovatorField").style.display = "block";
         document.getElementById("editor").style.display = "none";
         isEdit = false;
     }else{
-        document.getElementById("editmode").innerHTML = "run mode";
+        document.getElementById("editmode").innerHTML = "zpustit";
         document.getElementById("poznavackovatorField").style.display = "none";
         document.getElementById("editor").style.display = "block";
         isEdit = true;
@@ -156,7 +156,7 @@ function pznLearn(){
 function pznShow() {
     if(displayingName){
         //hidename
-        document.getElementById("showButton").innerHTML = "show name"
+        document.getElementById("showButton").innerHTML = "ukázat jméno"
         document.getElementById("imageNamePzn").innerHTML = "";
         pickRandom();
         displayingName = false;
@@ -164,7 +164,7 @@ function pznShow() {
     else{
         document.getElementById("imageNamePzn").innerHTML = pickedName;
         //showname
-        document.getElementById("showButton").innerHTML = "next random image"
+        document.getElementById("showButton").innerHTML = "další náhodná fotka"
         displayingName = true;
     }
 }
@@ -178,8 +178,10 @@ document.getElementById("toggleType").addEventListener("change", function() {
     if (this.checked) {
         // Switch is ON
         // Perform actions when switch is on
+        dropdown.innerHTML = document.getElementById("vyssiData").innerHTML;
     } else {
         // Switch is OFF
         // Perform actions when switch is off
+        dropdown.innerHTML = document.getElementById("nizsiData").innerHTML;
     }
 });
