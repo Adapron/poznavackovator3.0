@@ -174,8 +174,9 @@ function sameName(){
     document.getElementById("imageDivPzn").src = pickedImages[displayedIndex];
 }
 document.getElementById("toggleType").addEventListener("change", function() {
+    console.log("switched")
     // Toggle the switch's state
-    if (this.checked) {
+    if (document.getElementById("toggleType").checked) {
         // Switch is ON
         // Perform actions when switch is on
         dropdown.innerHTML = document.getElementById("vyssiData").innerHTML;
