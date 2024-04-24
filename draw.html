@@ -65,16 +65,16 @@
                 return fetch(file)
                     .then(response => response.json())
                     .then(data => {
-                        currentlyLoadedPzn = data;
-                        setupPzn()
-                        loadCustomEditor(0)
+                        
+                        alert(compareLinearObjects(convertLinear(nodes, lines), data)?"correct!":"incorrect!")
+
                     }).catch(error => {
                         console.error('Error:', error);
                     });
             }
 
         function buttonPress(){
-            alert(compareLinearObjects(convertLinear(nodes, lines), loadJSON(document.getElementById("bordered-div").innerHTML+".json").data)?"correct!":"incorrect!")
+            loadJSON(document.getElementById("bordered-div").innerHTML+".json");
             randomBase()
         }
 
