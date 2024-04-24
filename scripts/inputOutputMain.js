@@ -61,11 +61,13 @@ function savejson(){
     document.body.removeChild(link);
 }
 function searchGoogle() {
+    const searchElement = document.getElementById("autoSearch");
     const searchTerm = document.getElementById('enteredName').value.trim();
     if (searchTerm === '') {
         alert('Please enter a search term');
         return;
     }
+    searchElement.innerHTML = "..."
 
     const corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
     const googleImagesUrl = `https://commons.wikimedia.org/w/index.php?search=${encodeURIComponent(searchTerm)}&title=Special:MediaSearch&go=Go&type=image&uselang=cs`;
@@ -88,7 +90,7 @@ function searchGoogle() {
                 if(found>10)return
                 currentlyLoadedPzn.data[imageIndex][1].push(src);
         
-        
+                searchElement.innerHTML = "najít obrázky automaticky"
                 loadCustomEditor(imageIndex);
             }
         });
