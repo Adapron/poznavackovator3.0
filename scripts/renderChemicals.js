@@ -104,6 +104,8 @@ function drawLine(line, context, count, isBlack) {
 
 function drawLineToMouse(startNodeId, mousePosX, mousePosY, context) {
     const startNode = nodes.find(element => element.id === startNodeId);
+    if(!startNode) return;
+
     context.strokeStyle = "black"; // Change to desired color
     context.beginPath();
     context.moveTo(startNode.x, startNode.y);

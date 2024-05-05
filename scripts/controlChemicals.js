@@ -104,9 +104,8 @@ var selectedNodeEdited = false;
 
 var selectedNodeId = null; // Store the ID of the last added node
 
-document.addEventListener("keydown", function(event) {
-    const key = event.key;
-
+function pressKey(key){
+    console.log(key);
     let selectedNode = getNodeById(selectedNodeId);
     // Check if specific keys are pressed
 
@@ -123,10 +122,16 @@ document.addEventListener("keydown", function(event) {
     
     if(key.length == 1 && /[a-zA-Z]/.test(key)) selectedNode.type = selectedNode.type + key.toUpperCase();
 
-    if (/^\d$/.test(event.key)) selectedNode.type = selectedNode.type + subscriptMap[key];
+    if (/^\d$/.test(key)) selectedNode.type = selectedNode.type + subscriptMap[key];
 
     if(key == "Backspace") selectedNode.type = selectedNode.type.slice(0, -1);
 
+}
+
+document.addEventListener("keydown", function(event) {
+    const key = event.key;
+
+    pressKey(key)
     
 
 });
@@ -171,43 +176,63 @@ document.addEventListener("DOMContentLoaded", function() {
     var clickedPosY = null;
 
 
+    function onMouseMove(event){
+        
+            const rect = canvas.getBoundingClientRect();
+            var x;
+            var y;
+            if(event.touches && event.touches[0]){
+                var touch = event.touches[0];
+
+                x = touch.clientX - rect.left;
+                y = touch.clientY - rect.top;
+            }else{
+                x = event.clientX - rect.left;
+                y = event.clientY - rect.top;
+            }
+    
+            var overNode = getNodeAtPos(x,y);
+    
+            if(overNode != null) {
+                highlightedNodeId = overNode.id
+            }
+            else{
+                highlightedNodeId = null;
+            }
+    
+            if(clickedNode == null && mouseTimer > 0.05 && isMouseDown && distance(clickedPosX,clickedPosY, x, y) > 20) {
+                clickedNode = getNodeById(newNode(clickedPosX,clickedPosY,null));
+            }
+    
+    
+            currentMouseX = x;
+            currentMouseY = y;
+        
+    }
 
     
 
-    canvas.addEventListener("mousemove", function(event){
-        const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        var overNode = getNodeAtPos(x,y);
-
-        if(overNode != null) {
-            highlightedNodeId = overNode.id
-        }
-        else{
-            highlightedNodeId = null;
-        }
-
-        if(clickedNode == null && mouseTimer > 0.05 && isMouseDown && distance(clickedPosX,clickedPosY, x, y) > 20) {
-            clickedNode = getNodeById(newNode(clickedPosX,clickedPosY,null));
-        }
-
-
-        currentMouseX = x;
-        currentMouseY = y;
-    })
-
-    
-
-    canvas.addEventListener("mouseup", function(event) {
+    function onMouseeUp(event) {
+        if(currentlyDeleted)return;
+        
         isMouseDown = false;
 
         let button = event.button;
 
 
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+        var x;
+        var y;
+        console.log(event)
+        if(event.changedTouches && event.changedTouches[0]){
+            var touch = event.changedTouches[0];
+
+            x = touch.clientX - rect.left;
+            y = touch.clientY - rect.top;
+        }else{
+            x = event.clientX - rect.left;
+            y = event.clientY - rect.top;
+        }
 
         var releasedNode = getNodeAtPos(x,y);
 
@@ -230,8 +255,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         }
 
+        console.log(button)
+        
+        if(button == 0 || button == undefined) {
 
-        if(button == 0) {
+            
 
             const tapped = mouseTimer < 0.2;
 
@@ -241,7 +269,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     deselect()
 
                 }else{
-                    selectedNodeId = newNode(x,y,null);
+                    console.log("newnode")
+                    selectedNodeId = newNode(x,y,null); 
                 }
             }
 
@@ -275,6 +304,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     select(releasedNode);
                 }
             }
+                    clickCount = 0;
+                
+                
+            
+            
 
             
 
@@ -284,14 +318,20 @@ document.addEventListener("DOMContentLoaded", function() {
         clickedPosX = null;
         clickedPosY = null;
 
-    })
+    }
 
-    
-
-    canvas.addEventListener("mousedown", function(event) {
-
+    var clicks = 0;
+    var currentlyDeleted = false;
+    function onMouseDown(event) {
+        currentlyDeleted = false;
         isMouseDown = true;
         mouseTimer = 0;
+
+        clicks++;
+        
+        setTimeout(() => {
+            clicks = 0;
+        }, 200);
 
 
 
@@ -300,8 +340,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+
+        var x;
+        var y;
+        if(event.changedTouches && event.changedTouches[0]){
+            var touch = event.changedTouches[0];
+
+            x = touch.clientX - rect.left;
+            y = touch.clientY - rect.top;
+        }else{
+            x = event.clientX - rect.left;
+            y = event.clientY - rect.top;
+        }
+        
+        
 
         clickedPosX = x;
         clickedPosY = y;
@@ -311,12 +363,33 @@ document.addEventListener("DOMContentLoaded", function() {
         clickedNode = getNodeAtPos(x,y);
 
 
-        
+        if(clicks == 2){
+            removeNodeAndConnections(clickedNode.id);
+            deselect();
+            currentlyDeleted = true;
+        }
 
         
 
         redrawCanvas();
+
+        console.log(clickedPosX);
         
-    });
+    }
+    
+
+    canvas.addEventListener("mousemove", onMouseMove)
+
+    canvas.addEventListener("touchmove", onmousemove)
+    
+
+    canvas.addEventListener("mouseup", onMouseeUp)
+
+    canvas.addEventListener("touchend", onMouseeUp)
+
+    
+
+    canvas.addEventListener("mousedown", onMouseDown);
+    canvas.addEventListener("touchstart", onMouseDown);
 });
 

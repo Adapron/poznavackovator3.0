@@ -447,10 +447,16 @@
 
         
         <div id = "filePickWindowDropdown" class = "customDropDown" style="max-width: 600px; width:80%; height: 140px; position: absolute; ">
-            <button id = "slideDropDown" onclick="" class = "dropDownButton boing">+</button> 
-            <button  class="ui boing" style="width: 30%;" onclick="importJSON()">načíst soubor</button>
-            <button  class="ui boing" style="width: 30%;" onclick="savejson()">uložit soubor</button>
-            <button  class="ui boing" style="width: 30%;" id="editmode" onclick="editMode()">upravit</button>
+            <button id = "slideDropDown" onclick="slideDropDown()" class = "dropDownButton boing">+</button> 
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('C')">C</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('H')">H</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('O')">O</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('N')">N</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('S')">S</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('2')">2</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('3')">3</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('4')">4</button>
+            <button  class="ui boing" style="width: 10%;" onclick="pressKey('Backspace')">←</button>
         
         </div>
         
@@ -465,7 +471,7 @@
                 <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
             </div>
             <div id = "settings" class = "ui">
-                <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+                <button class="ui boing" onclick="exportJSON()" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
             </div>
 
             <div id = "editor" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
@@ -529,7 +535,7 @@
 
             </div>
 
-            <div id = "chemieField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
+            <div id = "chemieField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: block; touch-action: none;">
             
                 <div class="ui imageDiv"><canvas id="myCanvas" width="600" height="322.2" style="width: 100%; height: 100%; border: 2px solid black"></canvas></div>
                 
@@ -592,6 +598,23 @@
                     event.preventDefault(); // Prevent default behavior
                 }
             });
+
+
+            // Disable swipe gestures on touch devices
+            var startX;
+            var startY;
+
+            canvas2.addEventListener('touchstart', function(e) {
+                var touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+            }, false);
+
+            canvas2.addEventListener('touchmove', function(e) {
+                if (Math.abs(startX - e.touches[0].clientX) > 10 || Math.abs(startY - e.touches[0].clientY) > 10) {
+                    e.preventDefault();
+                }
+            }, false);
         </script>
 
         <script src="scripts/inputOutputMain.js"></script>
