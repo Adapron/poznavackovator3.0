@@ -198,12 +198,82 @@ function blendColors(color1, color2, percentage) {
     return blendedColor;
 }
 
+// Function to shuffle an array of indices
+function shuffleIndices(indices) {
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return indices;
+}
+
+// Function to unshuffle an array of indices
+function unshuffleIndices(indices, shuffledIndices) {
+    const unshuffledIndices = new Array(indices.length);
+    for (let i = 0; i < indices.length; i++) {
+        unshuffledIndices[shuffledIndices[i]] = indices[i];
+    }
+    return unshuffledIndices;
+}
+
+// Function to apply modification to a list based on shuffled indices
+function modifyListByShuffledIndices(list, shuffledIndices, modificationFunction, arg) {
+    const modifiedList = new Array(list.length);
+    for (let i = 0; i < list.length; i++) {
+        modifiedList[shuffledIndices[i]] = modificationFunction(list[i], arg);
+    }
+    return modifiedList;
+}
+
+// Main function to perform shuffling, modification, and unshuffling
+function shuffleModifyUnshuffle(list, modificationFunction, arg) {
+    // Generate indices for the original list
+    const indices = list.map((_, index) => index);
+
+    // Shuffle the indices
+    const shuffledIndices = shuffleIndices([...indices]);
+
+    // Apply modification to the list based on shuffled indices
+    const modifiedList = modifyListByShuffledIndices(list, shuffledIndices, modificationFunction, arg);
+
+    // Unshuffle the modified list
+    const unshuffledIndices = unshuffleIndices(indices, shuffledIndices);
+    const unshuffledList = modifyListByShuffledIndices(modifiedList, unshuffledIndices, item => item, arg); // Identity function
+
+    return unshuffledList;
+}
+function averageArrays(arrays) {
+    // Initialize an array to hold the sums of corresponding elements
+    let sumArray = [];
+
+    // Calculate the sum of corresponding elements across arrays
+    arrays.forEach(array => {
+        array.forEach((num, index) => {
+            sumArray[index] = (sumArray[index] || 0) + num;
+        });
+    });
+
+    // Calculate the average by dividing each sum by the number of arrays
+    let numArrays = arrays.length;
+    let averageArray = sumArray.map(sum => sum / numArrays);
+
+    return averageArray;
+}
+
 
 function checkButton(intendedChemical){
     var intendedLinearObject = convertLinear(intendedChemical.nodes, intendedChemical.lines);
     var myLinearObject = convertLinear(nodes, lines);
 
-    var percentages = matchLists(intendedLinearObject, myLinearObject);
+    
+
+    var allpercentages = []
+
+    for (let index = 0; index < 20; index++) {
+        allpercentages.push(shuffleModifyUnshuffle(intendedLinearObject, matchLists, myLinearObject));
+        
+    }
+    var percentages = averageArrays(allpercentages);
 
     intendedChemical.nodes.forEach((node, index) => {
         node.highlight = blendColors("#ff5733", "#33ff57", (percentages[index]));
