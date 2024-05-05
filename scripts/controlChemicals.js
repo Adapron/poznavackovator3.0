@@ -105,7 +105,6 @@ var selectedNodeEdited = false;
 var selectedNodeId = null; // Store the ID of the last added node
 
 function pressKey(key){
-    console.log(key);
     let selectedNode = getNodeById(selectedNodeId);
     // Check if specific keys are pressed
 
@@ -113,14 +112,22 @@ function pressKey(key){
         selectedNode.type = "";
         selectedNodeEdited = true;
     }
+    console.log(key, selectedNode.type);
 
 
+    if(key == "Cl"){
+        selectedNode.type = selectedNode.type + "Cl";
+    }
     if(key == "Delete") {
         removeNodeAndConnections(selectedNode.id);
         return;
     }
+
+    if((key == "l" || key == "L" )&& selectedNode.type == "C"){ selectedNode.type = "Cl"; return;}
     
     if(key.length == 1 && /[a-zA-Z]/.test(key)) selectedNode.type = selectedNode.type + key.toUpperCase();
+
+
 
     if (/^\d$/.test(key)) selectedNode.type = selectedNode.type + subscriptMap[key];
 
