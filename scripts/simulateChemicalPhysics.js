@@ -45,6 +45,35 @@
     
                 return { fx, fy };
             }
+
+           
+
+            function findLoops(startNode, nodes, lines) {
+                const visited = new Set();
+                const stack = [{ node: startNode, path: [startNode] }];
+            
+                while (stack.length > 0) {
+                    const { node, path } = stack.pop();
+                    visited.add(node.id);
+            
+                    for (const line of lines) {
+                        if (line.startNodeId === node.id || line.endNodeId === node.id) {
+                            const nextNodeId = line.startNodeId === node.id ? line.endNodeId : line.startNodeId;
+                            const nextNode = nodes.find(n => n.id === nextNodeId);
+                            if (!visited.has(nextNode.id) && !path.some(p => p.id === nextNode.id)) {
+                                stack.push({ node: nextNode, path: [...path, nextNode] });
+                            } else if (path.some(p => p.id === nextNode.id)) {
+                                const loop = path.slice(path.findIndex(p => p.id === nextNode.id));
+                                if(loop.length>2){
+                                    console.log("Found loop:", loop);
+                                    return loop;
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
     
            
     
@@ -56,8 +85,8 @@
                 let sumx = 0;
                 let sumy = 0;
                 nodes.forEach(node => {
-                    sumx += node.x - 250;
-                    sumy += node.y - 250;
+                    sumx += node.x - canvas.width/2;
+                    sumy += node.y - canvas.height/2;
                 })
     
                 sumx = (sumx / nodes.length) * -0.01;
@@ -81,6 +110,9 @@
                             totalForceY += fy;
                         }
                     });
+
+                    
+                    
                     
                     // Calculate repulsion forces between all nodes
                     nodes.forEach(otherNode => {

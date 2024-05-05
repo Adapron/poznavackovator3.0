@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Poznávačkovátor</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .centered-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh; /* Set the height of the container to the viewport height */
+            }
+
+            /* Make the text big */
+            .big-text {
+                font-size: 3em; /* Adjust the font size as needed */
+            }
+            #poznavackovator{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+            }
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+                top: 12px;
+                margin: 0 10px;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            #overlay {
+                display: none; /* Hide the overlay by default */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+                z-index: 9998; /* Ensure it appears behind the popup */
+            }
+
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ffd7fd;
+                transition: 0.4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: 0.4s;
+                border-radius: 50%;
+            }
+
+            .checkbox:checked + .slider {
+                background-color: #a3289380;
+            }
+
+            .checkbox:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+            .section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+
+                z-index: 1;
+            }
+
+            .ui {
+                height: 30px;
+                border-radius: 10px;
+                border-width: 0px;
+                box-shadow: 0 0 50px 5px #a3289380;
+                background-color: white;
+                
+            }
+
+            .customDropDown {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                justify-content: space-between;
+                padding: 0 20px;
+                z-index: 0;
+
+                box-shadow: 0 0 50px 5px #a3289380;
+                position: relative;
+
+                background-color: white;
+                border-radius: 10px;
+
+                transition: transform 0.3s;
+                transform: translateY(-110px);
+                position: absolute;
+                top: 295px;
+
+            }
+
+            
+
+            
+
+            .slidedDropDown{
+                transform: translateY(-30px);
+            }
+
+            .slidedDropDownMain{
+                transform: translateY(+200px);
+            }
+        
+            .dropDownButton{
+                border: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding: 10px;
+                background-color: #00000000;
+            }
+
+
+            .boing {
+                transition: transform 0.1s linear;
+            }
+
+            .boing:active {
+                transform: scale(0.9);
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(0.90);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            #learned {
+                height: fit-content;
+                width: 80%
+                
+            }
+
+            #learned li:hover {
+                font-weight: bold;
+            }
+
+
+            #listdiv {
+                width: 100%;
+                height: 70%;
+                position: relative;
+                border-radius: 10px;
+                top:10px;
+                background-color: rgb(255, 255, 255);
+                box-shadow: 0 0 50px 5px #9e589580;
+                overflow-y: auto;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+			#photo-list {
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+				
+				overflow-wrap: normal;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+				flex-wrap: wrap;
+            }
+
+            .imageName{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                top: 0px;
+            }
+
+            #enteredName{
+                width: 100%;
+                height: 50px;
+                position: relative;
+                top: 0px;
+            }
+
+            .imageDiv {
+                width: 100%;
+                height: 30vh;
+                position: relative;
+                top: 30px;
+                margin-bottom: 30px;
+            }
+
+            #popup {
+                position: fixed; /* or absolute */
+                top: 150%; /* Position it vertically in the middle */
+                left: 50%; /* Position it horizontally in the middle */
+                transform: translate(-50%, -50%); /* Center the div */
+                z-index: 9999; /* Ensure it appears above other elements */
+                
+                transition: top 0.3s ease; /* Add transition for smooth sliding animation */
+
+                /* Add more styling as needed */
+            }
+
+
+            body.blur {
+                filter: blur(5px); /* Adjust the blur amount as needed */
+                pointer-events: none; /* Ensure the blurred content is not clickable */
+            }
+
+
+			#drag-drop-area {
+            border: 2px dashed #ccc;
+			width: 99.3%;
+			height: 98.9%;
+            text-align: center;
+            background: repeating-linear-gradient(
+                45deg,
+                rgb(255, 255, 255),
+                rgb(255, 255, 255) 40px,
+                rgb(240, 240, 240) 40px,
+                rgb(240, 240, 240) 80px
+            );     
+
+
+
+			}
+				.drag-over {
+                    background: repeating-linear-gradient(
+                        45deg,
+                        rgb(255, 255, 255),
+                        rgb(255, 255, 255) 40px,
+                        rgb(230, 230, 230) 40px,
+                        rgb(230, 230, 230) 80px
+                );    
+					
+				}
+				#photo-list {
+                    justify-content: center;
+					list-style-type: none;
+					padding: 0;
+					display: flex;
+				}
+				#photo-list img {
+					width: 100px;
+					height: 100px;
+                    padding-top: 10px;
+					margin-right: 10px;
+					cursor: pointer;
+				}
+
+            .under {
+                align-items: center;
+                display: flex;
+                gap: 20px;
+                position: relative;
+                top: 15px;
+                margin-bottom: 30px;
+                align-items: center;
+                justify-content: center;
+
+            }
+
+            @font-face {
+                font-family: 'SevenSegment';
+                src:    url('font.woff2') format('woff2'),
+                        url('font.ttf') format('truetype'),
+                        url('font.woff') format('woff');
+                /* Add more font formats as needed for cross-browser support */
+                /* Replace 'path/to/seven-segment-font' with the actual path to the font files */
+            }
+
+            .field {
+                height: 50px;
+                width: 90%;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+            }
+
+            .clockFont{
+                font-family: 'SevenSegment', Arial, sans-serif;
+            }
+
+
+
+            #info {
+                position: absolute;
+                top: 10px;
+                left: -50px;
+                width: 100%;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
+            
+
+            #settings {
+                position: absolute;
+                top: 10px;
+                right: -50px;
+                width: 100%;
+                display: flex;
+                height: 50px;
+                justify-content: center;
+                align-items: center;
+                background-color: rgb(255, 255, 255);
+                z-index: -5555;
+            }
+
+            
+
+           
+        </style>
+    </head>
+
+    
+
+    <body>
+        <br style = "height:20px;">
+        <div id = "title" class = "section" style="width: 98.6%; z-index: 1; height: 120px; border-radius: 0px; "> 
+            <br style = "height:20px;">
+            <img src = "title.png" class="boing" >
+            <br style = "height:20px;">
+            <br style = "height:20px;">
+        </div>
+        <div id = "poznavackovator">
+        
+
+        
+
+        <br style = "height:20px;">
+
+        <div id = "filePickWindow" class = "section" style="max-width: 600px; width: 80%; height: 130px; position: absolute; top: 160px">
+            <br style = "height:20px;">
+             <noscript>
+                <select id = "myDropdown" class="ui" style="width: 100%; height: 50px;" >
+                
+                    <option class="ui" onclick="loadJSON(`./poz/houbyN.json`)">1-Houby, řasy, prvoci, žahavci, ploštěnci, hlísti, měkkýši, kroužkovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/clenovciN.json`)">2-Členovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/vytrusneN.json`)">3-Výtrusné, nahosemenné, kulturní rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/krytosemenneN.json`)">4-Krytosemenné rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ostnoN.json`)">5-Ostnokožci, pláštěnci, bezlebeční, kruhoústí, paryby, ryby</option>
+                    <option class="ui" onclick="loadJSON(`./poz/obojN.json`)">6-Obojživelníci, plazi</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ptaciN.json`)">7-Ptáci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/savciN.json`)">8-Savci</option>
+    
+                    
+    
+                </select>
+    
+                <div style="display: none;" id="nizsiData">
+                    <option class="ui" onclick="loadJSON(`./poz/houbyN.json`)">1-Houby, řasy, prvoci, žahavci, ploštěnci, hlísti, měkkýši, kroužkovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/clenovciN.json`)">2-Členovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/vytrusneN.json`)">3-Výtrusné, nahosemenné, kulturní rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/krytosemenneN.json`)">4-Krytosemenné rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ostnoN.json`)">5-Ostnokožci, pláštěnci, bezlebeční, kruhoústí, paryby, ryby</option>
+                    <option class="ui" onclick="loadJSON(`./poz/obojN.json`)">6-Obojživelníci, plazi</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ptaciN.json`)">7-Ptáci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/savciN.json`)">8-Savci</option>
+                </div>
+    
+                <div style="display: none;" id="vyssiData">
+                    <option class="ui" onclick="loadJSON(`./poz/rasyV.json`)">1-Řasy, houby, výtrusné, nahosemenné, kulturní rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/krytoV.json`)">2-Krytosemenné rostliny</option>
+                    <option class="ui" onclick="loadJSON(`./poz/prvoV.json`)">3-Prvoci, houbovci, žahavci, ploštěnci, hlístice, měkkýši, kroužkovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/clenoV.json`)">4-Členovci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ostnoV.json`)">5-Ostnokožci, polostrunatci, pláštěnci, bezlebeční, kruhoústí, paryby, ryby</option>
+                    <option class="ui" onclick="loadJSON(`./poz/obojV.json`)">6-Obojživelníci, plazi</option>
+                    <option class="ui" onclick="loadJSON(`./poz/ptaciV.json`)">7-Ptáci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/savciV.json`)">8-Savci</option>
+                    <option class="ui" onclick="loadJSON(`./poz/krytoextraV.json`)">9-Krytosemenné rostliny</option>
+    
+                    <option class="ui" onclick="loadJSON(`./poz/kosti_converted.json`)">kosti</option>
+                    <option class="ui" onclick="loadJSON(`./poz/slvaly_a_kosti.json`)">kosti a svaly</option>
+                    <option class="ui" onclick="loadJSON(`./poz/prvni_papir_a_druhy_papir.json`)">dýchací a cévní soustavy</option>
+                    <option class="ui" onclick="loadJSON(`./poz/kasas.json`)">kosti a svaly a dýchací a cévní</option>
+                </div>
+    
+    
+                <div id = "switchContainer">
+                    <button class = "boing ui" style="height: 30px;">nižší</button>
+                    <label class="switch boing" >
+                        <input type="checkbox" id="toggleType" class="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <button class = "boing ui" style="height: 30px;">vyšší</button>
+                </div>
+                <br style = "height:20px;">
+             </noscript>
+
+             <div class="ui" style="width: 100%; height: 100%; font: 100px sans-serif; text-align: center;">CHEMIE</div>
+
+        </div>
+
+        
+        <div id = "filePickWindowDropdown" class = "customDropDown" style="max-width: 600px; width:80%; height: 140px; position: absolute; ">
+            <button id = "slideDropDown" onclick="" class = "dropDownButton boing">+</button> 
+            <button  class="ui boing" style="width: 30%;" onclick="importJSON()">načíst soubor</button>
+            <button  class="ui boing" style="width: 30%;" onclick="savejson()">uložit soubor</button>
+            <button  class="ui boing" style="width: 30%;" id="editmode" onclick="editMode()">upravit</button>
+        
+        </div>
+        
+        <div id = "customContainer" style="max-width: 600px; width:80%; height: 55px; ">
+        </div>
+
+        <div id = "main" class = "section" style="max-width: 600px; width:80%; height: 570px; position: absolute; top: 350px; z-index: 10; box-shadow: none;">
+
+
+
+            <div id = "info" class="ui">
+                <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; left: 10px;"><img src="i.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+            <div id = "settings" class = "ui">
+                <button class="ui boing" onclick="" style="position: absolute;top: 10px; width: 30px; right: 10px;"><img src="https://cdn.onlinewebfonts.com/svg/img_272299.png" width="20px" height="20px" style="position: absolute;top: 5px; left: 5px;"></button>
+            </div>
+
+            <div id = "editor" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
+            
+
+                <div id = "imageDiv" class = "imageDiv ui ">
+					<div id="drag-drop-area" style="align-items: center; display:flex; justify-content: center; ">
+						
+                        <button id="removeCustomThing" style="display: none; position: absolute;" onclick="RemoveCustomThing()">odstranit</button>
+
+						<ul id="photo-list">
+
+
+						</ul>
+					</div>
+					<button onclick="ImageLeft()" class="ui boing" id = "imageArrowLeft" style = "width: 20px; left: 5px; height: 20px; position: absolute; top: 50%; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380;"><</button>
+					<button onclick="ImageRight()" class="ui boing" id = "imageArrowRight" style = "width: 20px; height: 20px; position: absolute; top: 50%; right: 5px; z-index: 2; text-align: center; box-shadow: 0 0 25px 5px #a3289380; ">></button>
+                </div>
+
+                <div id = "underImage" class = "under" >
+                    <a id="imgCounder" class = "ui field clockFont">1/1</a>
+                    <button class = "ui field" onclick="searchGoogle()" id="autoSearch">najít obrázky automaticky</button>
+
+                </div>
+
+                
+                <input id = "enteredName"  placeholder="enter name" class = "ui">
+
+
+                
+
+                
+
+
+            </div>
+
+            <div id = "poznavackovatorField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: none;">
+            
+
+                <img id = "imageDivPzn" class = "ui imageDiv" onclick="sameName()">
+					
+
+                <div id = "underImagePzn" class = "under">
+                    <button class = "ui field boing" id = "showButton" onclick ="pznShow()">ukaž obrázek</button>
+                    <button class = "ui field boing" id = "learnButton" onclick="pznLearn()">přidat do naučených</button>
+                </div>
+
+                <div id = "imageNamePzn" class = "ui imageName centered-text big-text" style="margin-bottom: 40px;">
+
+                </div>
+
+                <div id = "underNamePzn" class = "under" style="top:-20px">
+                    <div id = "clockPzn" class = "ui field clockFont">
+                            00:00:01
+                    </div>
+                    <div id = "counterPzn" class = "ui field clockFont">
+                            0
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id = "chemieField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: block;">
+            
+                <div class="ui imageDiv"><canvas id="myCanvas" width="600" height="322.2" style="width: 100%; height: 100%; border: 2px solid black"></canvas></div>
+                
+					
+
+                <div id = "underImagePzn" class = "under">
+                    <button class = "ui field boing" id = "myButton" onclick ="exportJSON()">download</button>
+                    <button class = "ui field boing" id = "learnButton" onclick="buttonPress()">check</button>
+                </div>
+
+                <div id = "bordered-div" class = "ui imageName centered-text big-text" style="margin-bottom: 40px;">
+
+                </div>
+
+                <div id = "underNamePzn" class = "under" style="top:-20px">
+                    <div id = "clockChemie" class = "ui field clockFont">
+                            00:00:01
+                    </div>
+                    <div id = "counterChemie" class = "ui field clockFont">
+                            0
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div id = "mainDropdown" class = "customDropDown" style="max-width: 600px; width:100%; height: 400px; position: absolute; top: 315px;">
+                <button id = "slideDropDown2" onclick="slideDropDown2()" class = "dropDownButton boing">+</button>
+                
+                    
+                <div id = "listdiv">
+                    <ol id = "learned" style="column-count: 3;">
+                        
+                    </ol>
+                </div>
+            
+            </div>
+        </div>
+
+        
+
+    </div>
+
+
+    <div id="overlay" onclick="settings()" style="filter: none;"></div>
+    <div id="popup" class="ui" style="background-color: white; max-width: 600px; width:80%; height: 300px;filter: none;">
+        <!-- Popup content goes here -->
+    </div>
+    
+
+        <script>
+            const canvas2 = document.getElementById("myCanvas");
+            const rect2 = canvas2.getBoundingClientRect();
+            canvas2.width = rect2.width;
+            canvas2.height = rect2.height;
+
+            document.addEventListener("mousedown", function(event) {
+                if (event.button === 1) { // Check if middle mouse button is clicked
+                    event.preventDefault(); // Prevent default behavior
+                }
+            });
+        </script>
+
+        <script src="scripts/inputOutputMain.js"></script>
+        <script src="scripts/mainPageVisuals.js"></script>
+        <script src="scripts/mainControls.js"></script>
+        <script src="scripts/editorFunctionality.js"></script>
+        <script src="scripts/timer.js"></script>
+        <script src="scripts/chemicalsControl.js"></script>
+        <script src="scripts/compareChemicals.js"></script>
+        <script src="scripts/renderChemicals.js"></script>
+        <script src="scripts/controlChemicals.js"></script>
+        <script src="scripts/simulateChemicalPhysics.js"></script>
+
+        <script>
+            resetTimer();
+            startTimer();
+            updateListLearned(0);
+        </script>
+
+       
+    
+
+    </body>
+</html>

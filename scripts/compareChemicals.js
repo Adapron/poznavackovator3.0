@@ -76,15 +76,15 @@ function recurseNode(node, lines, nodes, depth) {
     return getNodeLinearObject(node, connectedNodes);
 }
 
-function areListsSameCircular(list1, list2, invert) {
+function areListsSameCircular(list1, list2, invert, depth) {
     // Find the index of the smallest element in list1
-    if(list1.length == 1) return (list1[0].count == list2[0].count && areTheSameNode(list1[0].node,list2[0].node))
+    if(list1.length == 1) return (list1[0].count == list2[0].count && areTheSameNode(list1[0].node,list2[0].node, invert, depth))
     let shiftedArray = list2;
     for (let index = 0; index < list1.length; index++) {
         shiftedArray = [...shiftedArray.slice(1), shiftedArray[0]];
         var foundInconsistency = false;
         for (let j = 0; j < list1.length; j++) {
-            if(list1[j].count != shiftedArray[j].count || !areTheSameNode(list1[j].node,shiftedArray[j].node)){
+            if(list1[j].count != shiftedArray[j].count || !areTheSameNode(list1[j].node,shiftedArray[j].node, invert, depth)){
                 foundInconsistency = true;
                 break;
             }
@@ -97,7 +97,7 @@ function areListsSameCircular(list1, list2, invert) {
     }
     return false;
 }
-function areListsSame(list1, list2, invert) {
+function areListsSame(list1, list2, invert, depth) {
     
 
 
@@ -113,7 +113,7 @@ function areListsSame(list1, list2, invert) {
         // Iterate through copyArray2
         for (let i = 0; i < copyArray2.length; i++) {
             // Check if obj1 is the same as any object in copyArray2
-            if (areTheSameNode(obj1.node, copyArray2[i].node, invert)) {
+            if (areTheSameNode(obj1.node, copyArray2[i].node, invert, depth)) {
                 // If found, remove the object from copyArray2
                 copyArray2.splice(i, 1);
                 found = true;
@@ -131,14 +131,16 @@ function areListsSame(list1, list2, invert) {
     return true;
 }
 
-function areTheSameNode(node1, node2, invert) {
+function areTheSameNode(node1, node2, invert, depth = 4) {
     if(node1.type != node2.type) return false;
+    if(depth == 0 ) return true;
+
     if(node1.connections.length != node2.connections.length) return false;
     if(node1.connections.length == 0) return true;
     if(node1.connections.some(obj => obj.count > 1)){
-        return areListsSameCircular(node1.connections, node2.connections, invert);
+        return areListsSameCircular(node1.connections, node2.connections, invert, depth-1);
     }else{
-        return areListsSame(node1.connections, node2.connections, invert);
+        return areListsSame(node1.connections, node2.connections, invert, depth-1);
     }
 
 }
@@ -176,4 +178,95 @@ function compareLinearObjects(object1, object2, invert) {
 
     // If all objects in array1 are found in array2, and vice versa, return true
     return true;
+}
+
+function blendColors(color1, color2, percentage) {
+
+    if(isNaN(percentage)) percentage = 0;
+    percentage = Math.min(Math.max(percentage, 0), 1)
+    console.log(percentage)
+    // Convert hexadecimal color strings to RGB arrays
+    const rgb1 = [parseInt(color1.slice(1, 3), 16), parseInt(color1.slice(3, 5), 16), parseInt(color1.slice(5, 7), 16)];
+    const rgb2 = [parseInt(color2.slice(1, 3), 16), parseInt(color2.slice(3, 5), 16), parseInt(color2.slice(5, 7), 16)];
+
+    // Linearly interpolate between the two colors
+    const blendedRgb = rgb1.map((channel, index) => Math.round(channel * (1 - percentage) + rgb2[index] * percentage));
+
+    // Convert the blended RGB array back to hexadecimal format
+    const blendedColor = `#${blendedRgb.map(channel => channel.toString(16).padStart(2, '0')).join('')}`;
+
+    return blendedColor;
+}
+
+
+function checkButton(intendedChemical){
+    var intendedLinearObject = convertLinear(intendedChemical.nodes, intendedChemical.lines);
+    var myLinearObject = convertLinear(nodes, lines);
+
+    var percentages = matchLists(intendedLinearObject, myLinearObject);
+
+    intendedChemical.nodes.forEach((node, index) => {
+        node.highlight = blendColors("#ff5733", "#33ff57", (percentages[index]));
+    });
+
+    nodes = intendedChemical.nodes;
+    lines = intendedChemical.lines;
+    
+}
+
+
+function compare(a, b) {
+    return compareObjects(a,b);
+  }
+  
+  /**
+   * Matches elements from the secondary list to the main list and returns a list of match percentages.
+   * Each element in the secondary list is assigned to the best matching element in the main list,
+   * without using the same element from the main list more than once.
+   * @param {number[]} mainList - The main list of elements.
+   * @param {number[]} secondaryList - The secondary list of elements.
+   * @returns {number[]} A list of match percentages for each element in the secondary list.
+   */
+  function matchLists(mainList, secondaryList) {
+    const matchPercentages = [];
+    const usedMainElements = new Set();
+  
+    for (const secondaryElement of secondaryList) {
+      let bestMatch = 0;
+      let bestMatchIndex = -1;
+  
+      for (let i = 0; i < mainList.length; i++) {
+        const mainElement = mainList[i];
+        if (!usedMainElements.has(i)) {
+          const matchScore = compare(mainElement, secondaryElement);
+          if (matchScore > bestMatch) {
+            bestMatch = matchScore;
+            bestMatchIndex = i;
+          }
+        }
+      }
+  
+      if (bestMatchIndex !== -1) {
+        matchPercentages.push(bestMatch);
+        usedMainElements.add(bestMatchIndex);
+      } else {
+        matchPercentages.push(0);
+      }
+    }
+  
+    return matchPercentages;
+  }
+  
+  function compareObjects(obj1, obj2) {
+    var weigh = 1;
+    var similarity = 0;
+
+    for (let index = 0; index < 5; index++) {
+        weigh = weigh/2;
+        similarity += areTheSameNode(obj1, obj2, false, index)?weigh:0;
+        
+    }
+    similarity += 0.03125;
+
+    return similarity;
 }

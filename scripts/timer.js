@@ -20,4 +20,5 @@ function updateTimerDisplay() {
     const formattedTime = 
         `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     document.getElementById('clockPzn').textContent = formattedTime;
+    document.getElementById('clockChemie').textContent = formattedTime;
 }

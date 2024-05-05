@@ -1,0 +1,196 @@
+{
+  "nodes": [
+    {
+      "id": 69,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 296.8056269923568,
+      "y": 243.84377459006768,
+      "vx": 0.00964377880412414,
+      "vy": 0.16776413192526055,
+      "mass": 1
+    },
+    {
+      "id": 70,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 336.6848191181737,
+      "y": 212.57027164598867,
+      "vx": 0.008784814169057388,
+      "vy": 0.16471520561677366,
+      "mass": 1
+    },
+    {
+      "id": 72,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 337.9584528397436,
+      "y": 161.68833954759765,
+      "vx": 0.007704759528521635,
+      "vy": 0.16324006297581692,
+      "mass": 1
+    },
+    {
+      "id": 74,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 293.63135434654396,
+      "y": 136.06517129101593,
+      "vx": 0.006453115814241052,
+      "vy": 0.16323445460790117,
+      "mass": 1
+    },
+    {
+      "id": 76,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 253.6856213233274,
+      "y": 167.93291745382092,
+      "vx": 0.013782575085138627,
+      "vy": 0.17229628550726248,
+      "mass": 1
+    },
+    {
+      "id": 78,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 252.80588483373364,
+      "y": 218.78264548700287,
+      "vx": 0.006257006115126602,
+      "vy": 0.1716884344927933,
+      "mass": 1
+    },
+    {
+      "id": 81,
+      "shape": "node",
+      "type": "OH",
+      "highlight": "white",
+      "radius": 10,
+      "x": 379.5276069586447,
+      "y": 132.50879834063247,
+      "vx": 0.01881499254437457,
+      "vy": 0.17788632988819253,
+      "mass": 1
+    },
+    {
+      "id": 83,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 285.9826209408026,
+      "y": 85.51683088896927,
+      "vx": 0.01014566797896198,
+      "vy": 0.16115109952873755,
+      "mass": 1
+    },
+    {
+      "id": 85,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 245.83476876616012,
+      "y": 54.45380623007879,
+      "vx": 0.016686364711703747,
+      "vy": 0.15180236335555347,
+      "mass": 1
+    },
+    {
+      "id": 87,
+      "shape": "node",
+      "type": "OH",
+      "highlight": "white",
+      "radius": 10,
+      "x": 327.27523354249473,
+      "y": 56.04545663592496,
+      "vx": -0.007283803269380466,
+      "vy": 0.13572915309439007,
+      "mass": 1
+    }
+  ],
+  "lines": [
+    {
+      "id": 71,
+      "shape": "line",
+      "startNodeId": 69,
+      "endNodeId": 70,
+      "count": 2
+    },
+    {
+      "id": 73,
+      "shape": "line",
+      "startNodeId": 70,
+      "endNodeId": 72,
+      "count": 1
+    },
+    {
+      "id": 75,
+      "shape": "line",
+      "startNodeId": 72,
+      "endNodeId": 74,
+      "count": 2
+    },
+    {
+      "id": 77,
+      "shape": "line",
+      "startNodeId": 74,
+      "endNodeId": 76,
+      "count": 1
+    },
+    {
+      "id": 79,
+      "shape": "line",
+      "startNodeId": 76,
+      "endNodeId": 78,
+      "count": 2
+    },
+    {
+      "id": 80,
+      "shape": "line",
+      "startNodeId": 78,
+      "endNodeId": 69,
+      "count": 1
+    },
+    {
+      "id": 82,
+      "shape": "line",
+      "startNodeId": 72,
+      "endNodeId": 81,
+      "count": 1
+    },
+    {
+      "id": 84,
+      "shape": "line",
+      "startNodeId": 74,
+      "endNodeId": 83,
+      "count": 1
+    },
+    {
+      "id": 86,
+      "shape": "line",
+      "startNodeId": 83,
+      "endNodeId": 85,
+      "count": 2
+    },
+    {
+      "id": 88,
+      "shape": "line",
+      "startNodeId": 83,
+      "endNodeId": 87,
+      "count": 1
+    }
+  ]
+}

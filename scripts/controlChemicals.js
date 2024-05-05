@@ -34,6 +34,7 @@ function newNode(x,y,connectTo) {
         id: newNodeId,
         shape: "node",
         type: "C", // Set the type of node as needed
+        highlight: "white",
         radius: 20 * sizeMultiplier, // Set the radius as needed
         x: x,
         y: y,
@@ -166,7 +167,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
 
-    var clickedPos = null;
+    var clickedPosX = null;
+    var clickedPosY = null;
 
 
 
@@ -186,6 +188,9 @@ document.addEventListener("DOMContentLoaded", function() {
             highlightedNodeId = null;
         }
 
+        if(clickedNode == null && mouseTimer > 0.05 && isMouseDown && distance(clickedPosX,clickedPosY, x, y) > 20) {
+            clickedNode = getNodeById(newNode(clickedPosX,clickedPosY,null));
+        }
 
 
         currentMouseX = x;
@@ -276,7 +281,8 @@ document.addEventListener("DOMContentLoaded", function() {
             
         }
 
-        clickedPos = null;
+        clickedPosX = null;
+        clickedPosY = null;
 
     })
 
@@ -297,7 +303,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        clickedPos = (x,y);
+        clickedPosX = x;
+        clickedPosY = y;
 
         let connected = false;
 

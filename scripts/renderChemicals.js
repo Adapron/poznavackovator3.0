@@ -1,6 +1,6 @@
 //rendering
 
-var sizeMultiplier = 0.8;
+var sizeMultiplier = 0.5;
 
 let nodes = [];
 let lines = [];
@@ -8,8 +8,8 @@ var canvas    = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 const offscreenCanvas = document.createElement("canvas"); // Create offscreen canvas
-offscreenCanvas.width = 500;
-offscreenCanvas.height = 500;
+offscreenCanvas.width = canvas.width;
+offscreenCanvas.height = canvas.height;
 const offscreenCtx = offscreenCanvas.getContext("2d");
 
 var highlightedNodeId = null;
@@ -26,7 +26,7 @@ function drawNode(node, context, isSelected) {
         return;
     }
 
-    if(node.type == "C" && isNodeConnected && node.id != selectedNodeId && node.id != highlightedNodeId){return;}
+    if(node.type == "C" && isNodeConnected && node.id != selectedNodeId && node.id != highlightedNodeId && node.highlight == "white"){return;}
 
 
     context.beginPath();
@@ -42,7 +42,7 @@ function drawNode(node, context, isSelected) {
         context.stroke();
     }
     
-    context.fillStyle = "white"; // Fill color
+    context.fillStyle = node.highlight; // Fill color
     context.fill();
 
     context.textAlign = "left";
@@ -70,7 +70,7 @@ function drawNode(node, context, isSelected) {
 
     context.font = fontSize*sizeMultiplier+"px Arial"
 
-    context.fillText(node.type, node.x- ctx.measureText(text.charAt(0)).width*1.6, node.y);
+    context.fillText(node.type, node.x- ctx.measureText(text.charAt(0)).width*1, node.y);
 
     
 
