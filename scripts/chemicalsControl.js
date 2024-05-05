@@ -19,9 +19,8 @@ function loadJSON(file) { //loads a json from file by its path and check current
     return fetch(file)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
 
-            checkButton(JSON.parse(data));
+            checkButton(data);
         }).catch(error => {
             console.error('Error:', error);
         });
