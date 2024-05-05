@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    {
+      "id": 17,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 296.36631557651015,
+      "y": 207.87876451404165,
+      "vx": 0.001226723046603929,
+      "vy": -0.002432870113082465,
+      "mass": 1
+    },
+    {
+      "id": 18,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 339.0440987009356,
+      "y": 180.623693044664,
+      "vx": 0.002328715861815425,
+      "vy": 0.0019041099169476257,
+      "mass": 1
+    },
+    {
+      "id": 20,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 331.4331181407318,
+      "y": 130.54340646948972,
+      "vx": -0.0003981125157582275,
+      "vy": 0.005478705802709738,
+      "mass": 1
+    },
+    {
+      "id": 22,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 281.2354536693118,
+      "y": 123.95853665593602,
+      "vx": 0.0005912168911104274,
+      "vy": 0.0046932661700801025,
+      "mass": 1
+    },
+    {
+      "id": 24,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 261.91651834953717,
+      "y": 170.77347702692475,
+      "vx": -0.0036628405574505207,
+      "vy": 0.0025038817117676434,
+      "mass": 1
+    }
+  ],
+  "lines": [
+    {
+      "id": 19,
+      "shape": "line",
+      "startNodeId": 17,
+      "endNodeId": 18,
+      "count": 1
+    },
+    {
+      "id": 23,
+      "shape": "line",
+      "startNodeId": 20,
+      "endNodeId": 22,
+      "count": 1
+    },
+    {
+      "id": 26,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 17,
+      "count": 1
+    },
+    {
+      "id": 27,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 22,
+      "count": 1
+    },
+    {
+      "id": 28,
+      "shape": "line",
+      "startNodeId": 20,
+      "endNodeId": 18,
+      "count": 1
+    }
+  ]
+}

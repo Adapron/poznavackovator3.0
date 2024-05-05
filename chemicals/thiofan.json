@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    {
+      "id": 17,
+      "shape": "node",
+      "type": "S",
+      "highlight": "white",
+      "radius": 10,
+      "x": 297.2037017734791,
+      "y": 208.43942399418125,
+      "vx": -0.014927409384684915,
+      "vy": -0.022008960866310715,
+      "mass": 1
+    },
+    {
+      "id": 18,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 340.08481570056693,
+      "y": 181.46388300994062,
+      "vx": -0.009818672599956562,
+      "vy": -0.011144184095778546,
+      "mass": 1
+    },
+    {
+      "id": 20,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 333.7316272657468,
+      "y": 131.1952089342146,
+      "vx": -0.023977382010753973,
+      "vy": -0.006788937656865297,
+      "mass": 1
+    },
+    {
+      "id": 22,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 283.18809133316546,
+      "y": 126.78794943856224,
+      "vx": -0.012417898513758987,
+      "vy": 0.010248846542516917,
+      "mass": 1
+    },
+    {
+      "id": 24,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 261.25602939216066,
+      "y": 172.65720386328854,
+      "vx": 0.0035970679798443556,
+      "vy": -0.025485440125008113,
+      "mass": 1
+    }
+  ],
+  "lines": [
+    {
+      "id": 19,
+      "shape": "line",
+      "startNodeId": 17,
+      "endNodeId": 18,
+      "count": 1
+    },
+    {
+      "id": 23,
+      "shape": "line",
+      "startNodeId": 20,
+      "endNodeId": 22,
+      "count": 1
+    },
+    {
+      "id": 26,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 17,
+      "count": 1
+    },
+    {
+      "id": 31,
+      "shape": "line",
+      "startNodeId": 20,
+      "endNodeId": 18,
+      "count": 1
+    },
+    {
+      "id": 32,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 22,
+      "count": 1
+    }
+  ]
+}

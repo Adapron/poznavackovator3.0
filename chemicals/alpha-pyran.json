@@ -1,0 +1,120 @@
+{
+  "nodes": [
+    {
+      "id": 8,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 301.1472727216694,
+      "y": 94.8784822945292,
+      "vx": 0.00004910678009385676,
+      "vy": -0.0008996979811688591,
+      "mass": 1
+    },
+    {
+      "id": 9,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 302.8533769089676,
+      "y": 195.16453721638484,
+      "vx": -0.00005120360736178483,
+      "vy": 0.0007856360459686609,
+      "mass": 1
+    },
+    {
+      "id": 10,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 258.2786396991456,
+      "y": 170.98081778328728,
+      "vx": 0.00030367720200324933,
+      "vy": 0.00013751400024887239,
+      "mass": 1
+    },
+    {
+      "id": 12,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 257.25862101016173,
+      "y": 120.2835974391728,
+      "vx": 0.0006439410384139341,
+      "vy": 0.00012593686978049784,
+      "mass": 1
+    },
+    {
+      "id": 15,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 345.75777903080035,
+      "y": 118.99608860784168,
+      "vx": -0.00040282568476385607,
+      "vy": -0.0000695802363138062,
+      "mass": 1
+    },
+    {
+      "id": 17,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 346.70457944741025,
+      "y": 169.6947658612045,
+      "vx": -0.0005449652463986623,
+      "vy": -0.00006232301326448228,
+      "mass": 1
+    }
+  ],
+  "lines": [
+    {
+      "id": 11,
+      "shape": "line",
+      "startNodeId": 9,
+      "endNodeId": 10,
+      "count": 1
+    },
+    {
+      "id": 13,
+      "shape": "line",
+      "startNodeId": 10,
+      "endNodeId": 12,
+      "count": 2
+    },
+    {
+      "id": 14,
+      "shape": "line",
+      "startNodeId": 12,
+      "endNodeId": 8,
+      "count": 1
+    },
+    {
+      "id": 16,
+      "shape": "line",
+      "startNodeId": 8,
+      "endNodeId": 15,
+      "count": 1
+    },
+    {
+      "id": 18,
+      "shape": "line",
+      "startNodeId": 15,
+      "endNodeId": 17,
+      "count": 1
+    },
+    {
+      "id": 19,
+      "shape": "line",
+      "startNodeId": 17,
+      "endNodeId": 9,
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "nodes": [
+    {
+      "id": 17,
+      "shape": "node",
+      "type": "N",
+      "highlight": "white",
+      "radius": 10,
+      "x": 326.1759861207833,
+      "y": 211.23406637313974,
+      "vx": 0.13948230428759573,
+      "vy": -0.0007041268797661898,
+      "mass": 1
+    },
+    {
+      "id": 18,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 375.45259808902034,
+      "y": 195.16263905528294,
+      "vx": 0.11466084748468836,
+      "vy": -0.0028407571033918326,
+      "mass": 1
+    },
+    {
+      "id": 20,
+      "shape": "node",
+      "type": "NH",
+      "highlight": "white",
+      "radius": 10,
+      "x": 376.6937137841436,
+      "y": 143.57305373033972,
+      "vx": 0.0585345956441632,
+      "vy": 0.04192826592435352,
+      "mass": 1
+    },
+    {
+      "id": 24,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 281.65911819025547,
+      "y": 184.60193513395953,
+      "vx": 0.14507067285217456,
+      "vy": -0.002397055373716388,
+      "mass": 1
+    },
+    {
+      "id": 43,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 285.89645039171893,
+      "y": 133.1044440558317,
+      "vx": 0.14511782079753094,
+      "vy": 0.0021598573937573117,
+      "mass": 1
+    },
+    {
+      "id": 45,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 334.28240642280076,
+      "y": 114.16061750966463,
+      "vx": 0.1254094845266796,
+      "vy": 0.015138939532978908,
+      "mass": 1
+    },
+    {
+      "id": 58,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 338.6921452102515,
+      "y": 63.19196181534074,
+      "vx": 0.13360126699247107,
+      "vy": 0.03332251401118688,
+      "mass": 1
+    },
+    {
+      "id": 74,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 415.56711296494876,
+      "y": 227.1686375213606,
+      "vx": 0.09556385637487291,
+      "vy": -0.022177438788053675,
+      "mass": 1
+    },
+    {
+      "id": 84,
+      "shape": "node",
+      "type": "N",
+      "highlight": "white",
+      "radius": 10,
+      "x": 230.68435556714266,
+      "y": 191.99353434744754,
+      "vx": 0.14413629692218766,
+      "vy": 0.0035968518868260595,
+      "mass": 1
+    },
+    {
+      "id": 86,
+      "shape": "node",
+      "type": "C",
+      "highlight": "white",
+      "radius": 10,
+      "x": 204.0707958983278,
+      "y": 148.08068321314596,
+      "vx": 0.12506770826641636,
+      "vy": 0.012287360035526275,
+      "mass": 1
+    },
+    {
+      "id": 88,
+      "shape": "node",
+      "type": "N",
+      "highlight": "white",
+      "radius": 10,
+      "x": 239.4209702830587,
+      "y": 110.74508165504389,
+      "vx": 0.13926924153394615,
+      "vy": 0.023016059548470125,
+      "mass": 1
+    },
+    {
+      "id": 91,
+      "shape": "node",
+      "type": "H",
+      "highlight": "white",
+      "radius": 10,
+      "x": 327.2428276971093,
+      "y": 262.2931227005647,
+      "vx": 0.11844940438574333,
+      "vy": -0.0017149095479764426,
+      "mass": 1
+    },
+    {
+      "id": 93,
+      "shape": "node",
+      "type": "H",
+      "highlight": "white",
+      "radius": 10,
+      "x": 240.79245851899174,
+      "y": 59.71627033065785,
+      "vx": 0.08555682527879704,
+      "vy": 0.02030406158878529,
+      "mass": 1
+    },
+    {
+      "id": 95,
+      "shape": "node",
+      "type": "H",
+      "highlight": "white",
+      "radius": 10,
+      "x": 225.62843638183801,
+      "y": 242.70941552694785,
+      "vx": 0.0808686252223616,
+      "vy": -0.0010795193885632052,
+      "mass": 1
+    },
+    {
+      "id": 97,
+      "shape": "node",
+      "type": "O",
+      "highlight": "white",
+      "radius": 10,
+      "x": 153.2160652904819,
+      "y": 145.24379345086965,
+      "vx": 0.1227772986247304,
+      "vy": 0.006031935413335042,
+      "mass": 1
+    }
+  ],
+  "lines": [
+    {
+      "id": 46,
+      "shape": "line",
+      "startNodeId": 43,
+      "endNodeId": 45,
+      "count": 1
+    },
+    {
+      "id": 54,
+      "shape": "line",
+      "startNodeId": 18,
+      "endNodeId": 20,
+      "count": 1
+    },
+    {
+      "id": 57,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 17,
+      "count": 1
+    },
+    {
+      "id": 59,
+      "shape": "line",
+      "startNodeId": 45,
+      "endNodeId": 58,
+      "count": 2
+    },
+    {
+      "id": 71,
+      "shape": "line",
+      "startNodeId": 20,
+      "endNodeId": 45,
+      "count": 1
+    },
+    {
+      "id": 75,
+      "shape": "line",
+      "startNodeId": 18,
+      "endNodeId": 74,
+      "count": 2
+    },
+    {
+      "id": 78,
+      "shape": "line",
+      "startNodeId": 17,
+      "endNodeId": 18,
+      "count": 1
+    },
+    {
+      "id": 83,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 43,
+      "count": 2
+    },
+    {
+      "id": 85,
+      "shape": "line",
+      "startNodeId": 24,
+      "endNodeId": 84,
+      "count": 1
+    },
+    {
+      "id": 87,
+      "shape": "line",
+      "startNodeId": 84,
+      "endNodeId": 86,
+      "count": 1
+    },
+    {
+      "id": 89,
+      "shape": "line",
+      "startNodeId": 86,
+      "endNodeId": 88,
+      "count": 1
+    },
+    {
+      "id": 90,
+      "shape": "line",
+      "startNodeId": 88,
+      "endNodeId": 43,
+      "count": 1
+    },
+    {
+      "id": 92,
+      "shape": "line",
+      "startNodeId": 17,
+      "endNodeId": 91,
+      "count": 1
+    },
+    {
+      "id": 94,
+      "shape": "line",
+      "startNodeId": 88,
+      "endNodeId": 93,
+      "count": 1
+    },
+    {
+      "id": 96,
+      "shape": "line",
+      "startNodeId": 84,
+      "endNodeId": 95,
+      "count": 1
+    },
+    {
+      "id": 98,
+      "shape": "line",
+      "startNodeId": 86,
+      "endNodeId": 97,
+      "count": 2
+    }
+  ]
+}
