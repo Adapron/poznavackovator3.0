@@ -34,7 +34,7 @@ function buttonPress(){
     if(showing){
         showing = false;
         //checkButton(JSON.parse(myjson));
-
+        console.log("loadong json " +"./chemicals/"+document.getElementById("bordered-div").innerHTML+".json" );
         loadJSON("./chemicals/"+document.getElementById("bordered-div").innerHTML+".json");
     }else{
         showing = true;
