@@ -33,10 +33,12 @@ function buttonPress(){
     if(showing){
         showing = false;
         //checkButton(JSON.parse(myjson));
+        document.getElementById("learnButton").innerHTML = "next";
         console.log("loadong json " +"./chemicals/"+document.getElementById("bordered-div").innerHTML+".json" );
         loadJSON("./chemicals/"+document.getElementById("bordered-div").innerHTML+".json");
     }else{
         showing = true;
+        document.getElementById("learnButton").innerHTML = "check";
         nodes = [];
         lines = [];
         randomBase();
