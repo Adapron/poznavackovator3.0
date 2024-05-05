@@ -1,3 +1,5 @@
+const chemicalNames = ["acetyl","adenin","alanin","alpha-pyran","arginin","asparagin","cystein","cytosin","dioxan","fenylalanin","fosgen","furan","gamma-pyran","glutamin","glycin","guanin","histidin","imidazol","indol","isoleucin","kyselina_asparagova","kyselina_barbiturova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_mocova","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","mocovina","perhydrofuran","piperidin","prolin","purin","pyrazol","pyridin","pyrimidin","pyrrol","serin","thiazol","thiofan","thiofen","threonin","thymin","tryptofan","tyrosin","uracil","valin"];
+const chemicalDisplayNames = ["acetyl","adenin","alanin","alpha-pyran","arginin","asparagin","cystein","cytosin","dioxan","fenylalanin","fosgen","furan","gamma-pyran","glutamin","glycin","guanin","histidin","imidazol","indol","isoleucin","kyselina_asparagova","kyselina_barbiturova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_mocova","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","mocovina","perhydrofuran","piperidin","prolin","purin","pyrazol","pyridin","pyrimidin","pyrrol","serin","thiazol","thiofan","thiofen","threonin","thymin","tryptofan","tyrosin","uracil","valin"];
 
 
 function exportJSON() {
@@ -34,8 +36,8 @@ function buttonPress(){
         showing = false;
         //checkButton(JSON.parse(myjson));
         document.getElementById("learnButton").innerHTML = "next";
-        console.log("loadong json " +"./chemicals/"+document.getElementById("bordered-div").innerHTML+".json" );
-        loadJSON("./chemicals/"+document.getElementById("bordered-div").innerHTML+".json");
+        console.log("loadong json " +"./chemicals/"+chemicalNames[pickedIndexCh]+".json" );
+        loadJSON("./chemicals/"+chemicalNames[pickedIndexCh]+".json");
     }else{
         showing = true;
         document.getElementById("learnButton").innerHTML = "check";
@@ -61,11 +63,9 @@ randomBase(); //initialize page with a random chemical picked
 
 
 var pznLearned = [];
-var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
 
 function updateListLearned() {
-    var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
     
     var list = document.getElementById('learned');
@@ -97,13 +97,12 @@ var shownImages = 0;
 
 
 function pickRandomCh(){
-    var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
     const availableIndices = chemicalNames
         .map((_, index) => index)
         .filter(index => !pznLearned.includes(index));
         pickedIndexCh = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-    document.getElementById("bordered-div").innerHTML = chemicalNames[pickedIndexCh];
+    document.getElementById("bordered-div").innerHTML = chemicalDisplayNames[pickedIndexCh];
     
     //display
     console.log("displaying");
@@ -111,7 +110,7 @@ function pickRandomCh(){
     
 }
 function chemieLearn(){
-    var name = document.getElementById("bordered-div").innerHTML;
+    var name = chemicalNames[pickedIndexCh];
     if(pznLearned.includes(pickedIndexCh)) return;
     pznLearned.push(pickedIndexCh);
     pznLearnedNames.push(name);

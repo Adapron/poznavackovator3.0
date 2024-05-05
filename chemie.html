@@ -538,7 +538,7 @@
 
             <div id = "chemieField" class = "section" style="max-width: 600px; width:100%; height: 570px; position: absolute; top: 0px; z-index: 10; display: block; touch-action: none;">
             
-                <div class="ui imageDiv"><canvas id="myCanvas" width="600" height="322.2" style="width: 100%; height: 100%; border: 2px solid black"></canvas></div>
+                <div class="ui imageDiv"><canvas id="myCanvas" width="600" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" height="322.2" style="width: 100%; height: 100%; border: 2px solid black"></canvas></div>
                 
 					
 
@@ -633,6 +633,43 @@
             resetTimer();
             startTimer();
             updateListLearned(0);
+        </script>
+
+        <script>
+
+            function dragOverHandler(event) {
+            // Prevent default behavior to allow drop
+            event.preventDefault();
+            }
+
+            function dropHandler(event) {
+            // Prevent default behavior (opening the file in the browser)
+            event.preventDefault();
+
+            // Get the dropped files
+            const files = event.dataTransfer.files;
+
+            // Check if any file was dropped
+            if (files.length > 0) {
+                // Read the dropped file
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                // Parse the JSON data
+                const jsonData = JSON.parse(e.target.result);
+                
+                // Call the loadData function with the JSON data
+                checkButton(jsonData);
+                };
+                // Read the dropped file as text
+                reader.readAsText(files[0]);
+            }
+            }
+
+            function loadData(data) {
+            // Your code to handle the loaded data goes here
+            console.log(data); // For demonstration, logging the loaded data to the console
+            }
+
         </script>
 
        
