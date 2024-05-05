@@ -270,7 +270,7 @@ function checkButton(intendedChemical){
     var allpercentages = []
 
     for (let index = 0; index < 20; index++) {
-        allpercentages.push(shuffleModifyUnshuffle(intendedLinearObject, matchLists, myLinearObject));
+        allpercentages.push(matchLists(intendedLinearObject, myLinearObject));
         
     }
     var percentages = averageArrays(allpercentages);
