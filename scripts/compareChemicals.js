@@ -298,6 +298,10 @@ function compare(a, b) {
    * @returns {number[]} A list of match percentages for each element in the secondary list.
    */
   function matchLists(mainList, secondaryList) {
+
+    secondaryList = [...secondaryList];
+    mainList = [...mainList];
+
     const matchPercentages = [];
     
 
