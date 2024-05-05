@@ -229,31 +229,24 @@ function compare(a, b) {
    */
   function matchLists(mainList, secondaryList) {
     const matchPercentages = [];
-    const usedMainElements = new Set();
-  
-    for (const secondaryElement of secondaryList) {
-      let bestMatch = 0;
-      let bestMatchIndex = -1;
-  
-      for (let i = 0; i < mainList.length; i++) {
-        const mainElement = mainList[i];
-        if (!usedMainElements.has(i)) {
-          const matchScore = compare(mainElement, secondaryElement);
-          if (matchScore > bestMatch) {
-            bestMatch = matchScore;
-            bestMatchIndex = i;
-          }
-        }
-      }
-  
-      if (bestMatchIndex !== -1) {
-        matchPercentages.push(bestMatch);
-        usedMainElements.add(bestMatchIndex);
-      } else {
-        matchPercentages.push(0);
-      }
-    }
-  
+    
+
+    mainList.forEach(element => {
+        var bestmatch = -1;
+        var matchelemetn;
+        var matchindex;
+        secondaryList.forEach((secelement, index) => {
+            var match = compareObjects(element, secelement);
+            if(match > bestmatch){
+                bestmatch = match;
+                matchelemetn = element;
+                matchindex = index;
+            }
+        });
+
+        matchPercentages.push(bestmatch);
+        secondaryList.splice(matchindex, 1);
+    });
     return matchPercentages;
   }
   
