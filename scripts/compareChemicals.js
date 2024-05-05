@@ -319,7 +319,7 @@ function compare(a, b) {
         });
 
         matchPercentages.push(bestmatch);
-        secondaryListCopy.splice(matchindex, 1);
+        //secondaryListCopy.splice(matchindex, 1);
     });
     return matchPercentages;
   }
