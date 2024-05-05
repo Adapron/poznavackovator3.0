@@ -61,11 +61,11 @@ randomBase(); //initialize page with a random chemical picked
 
 
 var pznLearned = [];
-var chemicalNames = ["adenin","kyselina_citronova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna"];
+var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
 
 function updateListLearned() {
-    var chemicalNames = ["adenin","kyselina_citronova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna"];
+    var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
     
     var list = document.getElementById('learned');
@@ -97,7 +97,7 @@ var shownImages = 0;
 
 
 function pickRandomCh(){
-    var chemicalNames = ["adenin","kyselina_citronova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna"];
+    var chemicalNames = ["adenin","alanin","arginin","asparagin","cystein","fenylalanin","glutamin","glycin","histidin","isoleucin","kyselina_asparagova","kyselina_citronova","kyselina_glutamova","kyselina_jablecna","kyselina_mlecna","kyselina_pyrohroznova","kyselina_salicylova","kyselina_vinna","leucin","lysin","methionin","prolin","serin","threonin","tryptofan","tyrosin","valin"];
 
     const availableIndices = chemicalNames
         .map((_, index) => index)
