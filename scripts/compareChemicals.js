@@ -299,17 +299,17 @@ function compare(a, b) {
    */
   function matchLists(mainList, secondaryList) {
 
-    secondaryList = [...secondaryList];
-    mainList = [...mainList];
+    var secondaryListCopy = [...secondaryList];
+    var mainListCopy = [...mainList];
 
     const matchPercentages = [];
     
 
-    mainList.forEach(element => {
+    mainListCopy.forEach(element => {
         var bestmatch = -1;
         var matchelemetn;
         var matchindex;
-        secondaryList.forEach((secelement, index) => {
+        secondaryListCopy.forEach((secelement, index) => {
             var match = compareObjects(element, secelement);
             if(match > bestmatch){
                 bestmatch = match;
@@ -319,7 +319,7 @@ function compare(a, b) {
         });
 
         matchPercentages.push(bestmatch);
-        secondaryList.splice(matchindex, 1);
+        secondaryListCopy.splice(matchindex, 1);
     });
     return matchPercentages;
   }
