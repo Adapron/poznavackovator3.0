@@ -28,6 +28,38 @@ function loadJSON(file) { //loads a json from file by its path and check current
         });
 }
 
+    
+    const canvass = document.getElementById("myCanvas");
+
+function downloadScreenshot() {
+    // Convert canvas to data URL
+    const dataURL = canvass.toDataURL("image/png");
+
+    // Create a temporary link element
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = "canvas_screenshot.png";
+
+    // Append the link to the document
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Remove the link from the document
+    document.body.removeChild(link);
+}
+
+function cycle(){
+    downloadScreenshot();
+    buttonPress();
+    buttonPress();
+    chemieLearn();
+    nodes.forEach(node => {
+        node.highlight = "#ffffff";
+    });
+}
+
 
 var showing = true;
 function buttonPress(){
