@@ -31,14 +31,14 @@ function loadJSON(file) { //loads a json from file by its path and check current
     
     const canvass = document.getElementById("myCanvas");
 
-function downloadScreenshot() {
+function downloadScreenshot(name) {
     // Convert canvas to data URL
     const dataURL = canvass.toDataURL("image/png");
 
     // Create a temporary link element
     const link = document.createElement("a");
     link.href = dataURL;
-    link.download = "canvas_screenshot.png";
+    link.download = name + ".png" ;
 
     // Append the link to the document
     document.body.appendChild(link);
@@ -50,17 +50,21 @@ function downloadScreenshot() {
     document.body.removeChild(link);
 }
 
-function cycle(){
-    downloadScreenshot();
-    buttonPress();
-    buttonPress();
-    chemieLearn();
+function acycle(){
     nodes.forEach(node => {
         node.highlight = "#ffffff";
     });
+    setTimeout(() => {
+downloadScreenshot(document.getElementById("bordered-div").innerHTML);
+buttonPress();
+    buttonPress();
+    chemieLearn();
+                     }, 400);
+    
 }
 
 
+setInterval
 var showing = true;
 function buttonPress(){
 
