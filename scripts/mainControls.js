@@ -190,3 +190,7 @@ document.getElementById("toggleType").addEventListener("change", function() {
         dropdown.innerHTML = document.getElementById("nizsiData").innerHTML;
     }
 });
+
+
+
+loadJSON(`./poz/rasyV.json`)
