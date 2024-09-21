@@ -194,3 +194,5 @@ document.getElementById("toggleType").addEventListener("change", function() {
 
 
 loadJSON(`./poz/rasyV.json`)
+pznShow()
+pznShow()
