@@ -119,9 +119,11 @@
         currentRotation.push(newTerm);
     }
 
+    var maxcycle = 10;
+
     //init the current rotation from terms
     function initCurrentRotation() {
-        for (let i = 0; i < 10; i++){
+        for (let i = 0; i < maxcycle; i++){
             addTermToRotation();
         }
     }
@@ -152,16 +154,22 @@
     }
 
     function loadProgressFromCookies(pairs) {
+        console.log("Loading cookies");
         const match = document.cookie.match(/terms=([^;]+)/);
         if (match) {
+            console.log("Loading cookies - found");
             const jsonTerms = decodeURIComponent(match[1]);
             var dict = JSON.parse(jsonTerms);
             var terms = loadTerms(pairs);
 
             for (let term in terms) {
-                let termObj = terms.find(t => t.term === term);
-                if(term in dict) {
-                    let [score, last] = dict[term].split(',');
+                let termObj = terms[term];
+
+                console.log(termObj);
+
+                if(termObj.term in dict) {
+                    console.log(`Found ${termObj.term} in cookies`);
+                    let [score, last] = dict[termObj.term].split(',');
                     termObj.score = parseInt(score);
                     termObj.last = parseInt(last);
 
@@ -169,7 +177,8 @@
 
                 
             }
-
+            console.log(terms);
+            console.log(dict);
             return terms;
         }
         return loadTerms(pairs); // No saved progress
