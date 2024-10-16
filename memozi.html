@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaced Repetition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        #term, #definition {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #progress-container {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #f3f3f3;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 25px;
+            background-color: #4caf50;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Spaced Repetition Memory Trainer</h1>
+
+<div id="term">Term will appear here</div>
+<div id="definition" style="display:none;">Definition will appear here</div>
+
+<!-- Buttons -->
+<button id="showDefinition">Show Definition</button>
+<br>
+<button id="recallCorrect" style="display:none;background-color: #4caf50;">Did Recall</button>
+<button id="recallIncorrect" style="display:none;background-color: red;">Didn't Recall</button>
+
+<div id="progress-container">
+    <div id="progress-bar">0%</div>
+</div>
+
+<input type="file" id="fileInput" accept=".txt" />
+
+<script>
+    // List of term-definition pairs with initial scores
+    const LEARN_THRESHOLD = 10;  // Term is considered learnt when score reaches 3
+
+    
+    
+
+    // Current term to review
+    let currentTerm = null;
+
+    function updateProgressBar() {
+        let learntCount = 0
+        for (let term of terms) {
+            if (term.score >= LEARN_THRESHOLD) {
+                learntCount++;
+            } else if (term.score >= 0){
+                learntCount += term.score / LEARN_THRESHOLD;
+            }
+        }
+        const progress = (learntCount / terms.length) * 100;
+        document.getElementById('progress-bar').style.width = progress + "%";
+        document.getElementById('progress-bar').textContent = Math.floor(progress) + "%";
+    }
+
+
+    // Weighted random selection
+    function weightedSelection(objects, blacklist = []) {
+    // Filter out blacklisted objects
+    const filteredObjects = objects.filter(obj => !blacklist.includes(obj));
+
+    // If no objects remain after filtering, return null or handle as needed
+    if (filteredObjects.length === 0) {
+        return null; // or throw an error, or return a default object
+    }
+
+    // Transform scores to weights using inverse exponential
+    const weights = filteredObjects.map(obj => 1 / (1 + Math.exp(obj.score)));
+
+    // Sum all the weights
+    const totalWeight = weights.reduce((acc, weight) => acc + weight, 0);
+
+    // Generate a random number between 0 and the total weight
+    const randomWeight = Math.random() * totalWeight;
+
+    // Select an object based on its weight
+    let cumulativeWeight = 0;
+    for (let i = 0; i < filteredObjects.length; i++) {
+        cumulativeWeight += weights[i];
+        if (randomWeight < cumulativeWeight) {
+            return filteredObjects[i];
+        }
+    }
+
+    // Default case (should never hit this point)
+    return filteredObjects[filteredObjects.length - 1];
+}
+
+
+
+    const currentRotation = []
+
+    function addTermToRotation(){
+        
+        newTerm = weightedSelection(terms, currentRotation);
+           
+        currentRotation.push(newTerm);
+    }
+
+    //init the current rotation from terms
+    function initCurrentRotation() {
+        for (let i = 0; i < 10; i++){
+            addTermToRotation();
+        }
+    }
+
+    // Show a new term
+    function showNextTerm() {
+        //pick a random from the current rotation
+        currentTerm = weightedSelection(currentRotation, [currentTerm]);
+        
+        document.getElementById('term').textContent = currentTerm.term;
+        document.getElementById('definition').style.display = 'none';
+        document.getElementById('showDefinition').style.display = 'inline-block';
+        document.getElementById('recallCorrect').style.display = 'none';
+        document.getElementById('recallIncorrect').style.display = 'none';
+    }
+
+    function saveProgressToCookies() {
+        var dict = {};
+        for (let term of terms) {
+            dict[term.term] = `${term.score},${term.last}`;
+        }
+        const jsonTerms = JSON.stringify(dict);
+        document.cookie = `terms=${encodeURIComponent(jsonTerms)}; path=/; max-age=31536000`; // 1 year expiration
+    }
+
+    function dumpCookies(){
+        document.cookie = "terms=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+
+    function loadProgressFromCookies(pairs) {
+        const match = document.cookie.match(/terms=([^;]+)/);
+        if (match) {
+            const jsonTerms = decodeURIComponent(match[1]);
+            var dict = JSON.parse(jsonTerms);
+            var terms = loadTerms(pairs);
+
+            for (let term in terms) {
+                let termObj = terms.find(t => t.term === term);
+                if(term in dict) {
+                    let [score, last] = dict[term].split(',');
+                    termObj.score = parseInt(score);
+                    termObj.last = parseInt(last);
+
+                }
+
+                
+            }
+
+            return terms;
+        }
+        return loadTerms(pairs); // No saved progress
+    }
+
+    const pairs = {
+  "Arsenik (otrušík, utrejch)": "As₂O₃",
+  "Auripigment": "As₂S₃",
+  "Azurit": "Cu₃(CO₃)₂(OH)₂",
+  "Baryt": "BaSO₄",
+  "Bílá skalice": "ZnSO₄·7H₂O",
+  "Borax": "Na₂B₄O₇·10H₂O",
+  "Burel (Pyroluzit)": "MnO₂",
+  "Cinovec": "SnO₂",
+  "Cyankáli": "KCN",
+  "Červená krevní sůl": "K₃[Fe(CN)₆]",
+  "Čichací sůl": "(NH₄)₂CO₃",
+  "Čínská červená (rumělka)": "HgS",
+  "Dolomit": "CaMg(CO₃)₂",
+  "Draselný ledek": "KNO₃",
+  "Draselný louh (žíravé draslo)": "KOH",
+  "Fluorapatit": "Ca₅(PO₄)₃F",
+  "Glauberova sůl": "Na₂SO₄·10H₂O",
+  "Hašené (žíravé) vápno": "Ca(OH)₂",
+  "Hematit (krevel)": "Fe₂O₃",
+  "Chalkopyrit": "CuFeS₂",
+  "Chilský ledek": "NaNO₃",
+  "Chlorapatit": "Ca₅(PO₄)₃Cl",
+  "Jedlá (zažívací) soda": "NaHCO₃",
+  "Kadmiová žluť": "CdS",
+  "Kamenec": "KAl(SO₄)₂·12H₂O",
+  "Kazivec (fluorit)": "CaF₂",
+  "Korund": "Al₂O₃",
+  "Kryolit": "Na₃[AlF₆]",
+  "Lapis": "AgNO₃",
+  "Lučavka královská": "HCl + HNO₃",
+  "Magnesit": "MgCO₃",
+  "Magnetit": "Fe₃O₄",
+  "Malachit": "Cu₂(CO₃)(OH)₂",
+  "Měděnka": "(CuCO₃)₂·Cu(OH)₂",
+  "Modrá skalice": "CuSO₄·5H₂O",
+  "Mohrova sůl": "(NH₄)₂Fe(SO₄)₂·6H₂O",
+  "Nesslerovo činidlo": "Pb₃O₄",
+  "Olověná běloba": "2PbCO₃·Pb(OH)₂",
+  "Pálené vápno": "CaO",
+  "Potaš": "K₂CO₃",
+  "Pyrit": "FeS₂",
+  "Rajský plyn": "N₂O",
+  "Realgar": "As₄S₄",
+  "Galenit": "PbS",
+  "Halit": "NaCl",
+  "Kuprit": "Cu₂O",
+  "Minium (suřík)": "Pb₃O4",
+  "Sádrovec": "CaSO₄·2H₂O",
+  "Salmiak": "NH₄Cl",
+  "Sassolin": "H₃BO₃",
+  "Sfalerit": "ZnS",
+  "Siderit": "FeCO₃",
+  "Soda": "Na₂CO₃",
+  "Sodný louh (žíravý natron)": "NaOH",
+  "Solanka (halit)": "NaCl",
+  "Superfosfát": "Ca(H₂PO₄)₂",
+  "Sylvín": "KCl",
+  "Titanová běloba": "TiO₂",
+  "Vápenec (kalcit)": "CaCO₃",
+  "Vápenné mléko": "Ca(OH)₂",
+  "Vitriol (sejrovka)": "H₂SO₄",
+  "Zelená skalice": "FeSO₄·7H₂O",
+  "Zinková běloba": "ZnO",
+  "Zinková žluť": "ZnSO₄·7H₂O",
+  "Žlutá krevní sůl": "K₄[Fe(CN)₆]"
+}
+
+    function loadTerms(pairs){
+        //foreach pair
+
+        const loadedTerms = []
+
+        const terms = [];  // Clear the existing terms array
+        for (let term in pairs) {
+            if (loadedTerms.includes(term)) {alert("found repeated term")}
+            else{
+                loadedTerms.push(term)
+                terms.push({ term: term, definition: pairs[term], score: 0, last: 0 });
+            }
+        }
+
+
+        return terms;
+   
+    }
+
+    var terms = loadProgressFromCookies(pairs);
+
+    
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const fileContent = e.target.result;
+            const lines = fileContent.split('\n');
+            const dict = {};
+
+            lines.forEach(line => {
+                const [key, value] = line.split(':').map(item => item.trim());
+                if (key && value) {
+                    dict[key] = value;
+                }
+            });
+
+            // Convert the object to JSON format
+            const jsonOutput = JSON.stringify(dict, null, 2);
+
+            terms = loadProgressFromCookies(dict);
+            
+        };
+
+        reader.readAsText(file);
+    });
+
+
+
+    // Show the definition
+    document.getElementById('showDefinition').addEventListener('click', function() {
+        document.getElementById('definition').textContent = currentTerm.definition;
+        document.getElementById('definition').style.display = 'block';
+        document.getElementById('showDefinition').style.display = 'none';
+        document.getElementById('recallCorrect').style.display = 'inline-block';
+        document.getElementById('recallIncorrect').style.display = 'inline-block';
+    });
+
+    // Recall correct, increase score
+    document.getElementById('recallCorrect').addEventListener('click', function() {
+        if(currentTerm.last > 0) {
+            currentTerm.last *= 2;
+        }else{
+            currentTerm.last = 1;  
+        }
+        currentTerm.score += currentTerm.last;  // Increase score
+
+        if(currentTerm.score > LEARN_THRESHOLD){
+            //remove from rotation and add new one
+            currentRotation.splice(currentRotation.indexOf(currentTerm), 1);
+            addTermToRotation();
+            
+        }
+
+        updateProgressBar();     // Update progress
+        saveProgressToCookies();  // Save progress to cookies
+        showNextTerm();          // Show next term
+    });
+
+    // Recall incorrect, decrease score
+    document.getElementById('recallIncorrect').addEventListener('click', function() {
+        if(currentTerm.last < 0) {
+            currentTerm.last *= 2;
+        }else{
+            currentTerm.last = -1;  
+        }
+        currentTerm.score += currentTerm.last;  // Increase score
+
+        updateProgressBar();                                      // Update progress
+        saveProgressToCookies();                                   // Save progress to cookies
+        showNextTerm();                                           // Show next term
+    });
+
+    initCurrentRotation();
+    updateProgressBar();
+
+
+
+    // Initialize with the first term
+    showNextTerm();
+</script>
+
+</body>
+</html>

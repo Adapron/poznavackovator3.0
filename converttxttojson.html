@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to JSON Converter</title>
+</head>
+<body>
+    <h1>Import Text File and Convert to JSON</h1>
+    
+    <input type="file" id="fileInput" accept=".txt" />
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileContent = e.target.result;
+                const lines = fileContent.split('\n');
+                const dict = {};
+
+                lines.forEach(line => {
+                    const [key, value] = line.split(':').map(item => item.trim());
+                    if (key && value) {
+                        dict[key] = value;
+                    }
+                });
+
+                // Convert the object to JSON format
+                const jsonOutput = JSON.stringify(dict, null, 2);
+
+                // Display the JSON result in the pre element
+                document.getElementById('output').textContent = jsonOutput;
+            };
+
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>

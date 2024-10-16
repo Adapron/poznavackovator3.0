@@ -1,0 +1,65 @@
+Arsenik (otrušík, utrejch): As₂O₃
+Auripigment: As₂S₃
+Azurit: Cu₃(CO₃)₂(OH)₂
+Baryt: BaSO₄
+Bílá skalice: ZnSO₄·7H₂O
+Borax: Na₂B₄O₇·10H₂O
+Burel (Pyroluzit): MnO₂
+Cinovec: SnO₂
+Cyankáli: KCN
+Červená krevní sůl: K₃[Fe(CN)₆]
+Chlorkal: KCl
+Čínská červená (rumělka): HgS
+Dolomit: CaMg(CO₃)₂
+Draselný ledek: KNO₃
+Draselný louh (žíravé draslo): KOH
+Fluorapatit: Ca₅(PO₄)₃F
+Glauberova sůl: Na₂SO₄·10H₂O
+Hašené (žíravé) vápno: Ca(OH)₂
+Hematit (krevel): Fe₂O₃
+Chalkopyrit: CuFeS₂
+Chilský ledek: NaNO₃
+Chlorapatit: Ca₅(PO₄)₃Cl
+Jedlá (zažívací) soda: NaHCO₃
+Kadmiová žluť: CdS
+Kamenec: KAl(SO₄)₂·12H₂O
+Kazivec (fluorit): CaF₂
+Korund: Al₂O₃
+Kryolit: Na₃[AlF₆]
+Lapis: AgNO₃
+Lučavka královská: HCl + HNO₃
+Magnesit: MgCO₃
+Magnetit: Fe₃O₄
+Malachit: Cu₂(CO₃)(OH)₂
+Měděnka: (CuCO₃)₂·Cu(OH)₂
+Modrá skalice: CuSO₄·5H₂O
+Mohrova sůl: (NH₄)₂Fe(SO₄)₂·6H₂O
+Nesslerovo činidlo: Pb₃O₄
+Olověná běloba: 2PbCO₃·Pb(OH)₂
+Pálené vápno: CaO
+Potaš: K₂CO₃
+Pyrit: FeS₂
+Rajský plyn: N₂O
+Realgar: As₄S₄
+Galenit: PbS
+Halit: NaCl
+Kuprit: Cu₂O
+Minium (suřík): Pb₃O4
+Sádrovec: CaSO₄·2H₂O
+Salmiak: NH₄Cl
+Sassolin: H₃BO₃
+Sfalerit: ZnS
+Siderit: FeCO₃
+Soda: Na₂CO₃
+Sodný louh (žíravý natron): NaOH
+Solanka (halit): NaCl
+Superfosfát: Ca(H₂PO₄)₂
+Sylvín: KCl
+Titanová běloba: TiO₂
+Vápenec (kalcit): CaCO₃
+Vápenné mléko: Ca(OH)₂
+Vitriol (sejrovka): H₂SO₄
+Zelená skalice: FeSO₄·7H₂O
+Zinková běloba: ZnO
+Zinková žluť: ZnSO₄·7H₂O
+Žlutá krevní sůl: K₄[Fe(CN)₆]
